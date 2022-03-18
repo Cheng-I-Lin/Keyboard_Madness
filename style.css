@@ -1,0 +1,11 @@
+#intro{
+    position: absolute;
+}
+#grid{
+    left: 0%;
+    top: 0%;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(198, 199, 199);
+}

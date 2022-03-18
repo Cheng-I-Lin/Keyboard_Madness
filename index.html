@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Keyboard Madness</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <div id="intro">
+            <!--Design an intro image page-->
+            <img src="">
+            <!--Selects difficulty-->
+            <input type="range" min="0" max="255" value="198" class="slider" id="difficulty">
+        </div>
+        <div id="grid"></div>
+        <!--Use this to draw the different backgrounds, can change to img too-->
+        <canvas id="background" style="position: absolute;"></canvas>
+        <canvas id="meteorCanvas" style="position: absolute;"></canvas>
+        <!--Can call inventory to use items-->
+        <canvas id="inventory" style="position: absolute;"></canvas>
+        <!--Opens up inventory-->
+        <div id="openInventory"></div>
+        <h1 id="hi" style="position: absolute; top: 0%;">Hello</h1>
+    </body>
+    <script src="game.js"></script>
+</html>
