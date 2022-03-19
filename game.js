@@ -1,6 +1,6 @@
 //Use this.attribute for the attributes
 class Meteor{
-    constructor(x,symbol,level,lives,color,width=50,height=50,dead=false) {
+    constructor(x,symbol,speed,level,lives,color,width=50,height=50,dead=false) {
         this.x=x;
         this.y=-height;
         //Color determines the lives, like how jumps changes color in justaplatformer
@@ -16,15 +16,30 @@ class Meteor{
         this.dead=dead;
         this.width=width;
         this.height=height;
+        this.falling=true;
+        this.speed=speed;
     }
-    setX(){
-        return this.x+1;
+    falling(){
+        this.y+=this.speed;
     }
     //Becomes dead if symbol is clicked
     resolved(){
         this.dead=true;
     }
 }
+
+//Intro transitions
+setTimeout(function(){
+    document.getElementById("img").style.opacity=0;
+    document.getElementById("transition").style.opacity=1;
+},2000);
+setTimeout(function(){
+    document.getElementById("introImg").style.opacity=0;
+},7000);
+//Hides this page so hover button will work
+setTimeout(function(){
+    document.getElementById("introImg").style.display="none";
+},8000);
 
 var gameTime=20;
 const grid=document.getElementById("grid");
@@ -36,6 +51,8 @@ var inventory=[];
 //Used to determine the position of the red selection box
 var invX=0;
 var invY=0;
+//Use to store the inputs player made
+var inputKeys=[];
 
 /*Can use this to create meteors
 allMeteors.push(new Meteor(0,"s",1,1,"black"));
@@ -47,22 +64,16 @@ document.getElementById("hi").innerHTML=p1.dead;
 
 //Use two variables, one for x and one for symbol
 
-/*
+
 function drawBackground(){
-    let canvas=document.getElementById("ballCanvas");
+    let canvas=document.getElementById("background");
     let ds=canvas.getContext("2d");
-    canvas.style.left=gridPing.offsetLeft+"px";
-    canvas.style.top=gridPing.offsetTop+"px";
-    canvas.width = gridPing.offsetWidth;
-    canvas.height = gridPing.offsetHeight;
+    canvas.style.left=grid.offsetLeft+"px";
+    canvas.style.top=grid.offsetTop+"px";
+    canvas.width = grid.offsetWidth;
+    canvas.height = grid.offsetHeight;
     ds.clearRect(canvas.left,canvas.top,canvas.width,canvas.height);
-    if(!ping.dead){
-        ds.fillStyle="black";
-    } else{
-        ds.fillStyle="red";
-    }
-    ds.fillRect(0,ping.y,ping.width,ping.height);
-}*/
+}
 
 function drawGame(){
     let canvas=document.getElementById("meteorCanvas");
@@ -82,6 +93,17 @@ function drawGame(){
             }
         }
     } 
+}
+
+function next(){
+    document.getElementById("intro").style.bottom="100vh";
+}
+function back(){
+    document.getElementById("intro").style.bottom="0vh";
+}
+function startGame(){
+    next();
+    //Unpause game
 }
 
 //Draws the inventory
@@ -108,6 +130,14 @@ document.addEventListener("keyup", function(key){
             }
         }
     }
+});
+
+//Get player keyboard inputs
+document.addEventListener("keydown",function(key){
+    
+});
+document.addEventListener("keyup",function(key){
+    
 });
 
 //Use the index from eventlistener to call inventory items
@@ -161,12 +191,18 @@ function callInventory(index){
 }
 
 //Makes the meteors fall and create new objects
-function falling(){
+function game(){
 
 }
 
 setInterval(function(){
-    drawGame();
-    drawInventory();
-    falling();
+    if(!pause){
+        drawGame();
+        drawInventory();
+        game();
+    }
 },gameTime);
+/*
+Can have width=number of symbols
+Height can be an extra line of symbols where player has to click the things in the rows together to get rid of them
+*/

@@ -1,25 +1,46 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Keyboard Madness</title>
         <link rel="stylesheet" href="style.css" />
     </head>
     <body>
-        <div id="intro">
-            <!--Design an intro image page-->
-            <img src="">
-            <!--Selects difficulty-->
-            <input type="range" min="0" max="255" value="198" class="slider" id="difficulty">
-        </div>
+        <!--Colors from https://www.colorhunt.co/-->
         <div id="grid"></div>
         <!--Use this to draw the different backgrounds, can change to img too-->
         <canvas id="background" style="position: absolute;"></canvas>
         <canvas id="meteorCanvas" style="position: absolute;"></canvas>
+        <div id="instructionPage">
+            <h1>Game Instructions</h1>
+            <button class="button" onclick="back();"><strong>Back</strong></button>
+        </div>
+        <div id="gadget">
+            <h1>Gadgets Category</h1>
+            <button class="button" onclick="back();"><strong>Back</strong></button>
+        </div>
+        <div id="intro">
+            <!--Design an intro image page, falls down one by one to form title card-->
+            <br><br><br><br><br><br><br><br><br><br><br><img src="title.png"><br><br><br>
+            <h1 style="animation: flash 5s linear infinite;">...Press NEXT to start...</h1>
+            <button class="button" onclick="next();"><strong>Gadgets Category</strong></button>
+            <button class="button" onclick="next();"><strong>INSTRUCTIONS</strong></button>
+            <button class="button" onclick="startGame();"><strong>NEXT</strong></button><br>
+            <!--Selects difficulty-->
+            <input type="range" min="0" max="255" value="198" class="slider" id="difficulty">
+        </div>
+        <div id="introImg">
+            <br><br><br><br><br><img id="transition" src="keyboardTitle.png">
+            <img id="img" src="keyboard.png"><br>
+        </div>
+        <!--Draws the inputs-->
+        <div id="drawInput"></div>
         <!--Can call inventory to use items-->
         <canvas id="inventory" style="position: absolute;"></canvas>
         <!--Opens up inventory-->
         <div id="openInventory"></div>
-        <h1 id="hi" style="position: absolute; top: 0%;">Hello</h1>
+        <h1 id="hi" style="position: absolute; top: 0%;"></h1>
     </body>
     <script src="game.js"></script>
 </html>
