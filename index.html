@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Keyboard Madness</title>
         <link rel="stylesheet" href="style.css" />
+        <link rel="icon" type="image/png" href="icon.png"/>
     </head>
     <body>
         <!--Colors from https://www.colorhunt.co/-->
@@ -12,23 +13,33 @@
         <!--Use this to draw the different backgrounds, can change to img too-->
         <canvas id="background" style="position: absolute;"></canvas>
         <canvas id="meteorCanvas" style="position: absolute;"></canvas>
-        <div id="instructionPage">
-            <h1>Game Instructions</h1>
-            <button class="button" onclick="back();"><strong>Back</strong></button>
+        <div id="points"></div>
+        <div id="showInventory"><strong>Inventory</strong></div>
+        <div id="settingPage"><br>
+            <button id="pauseButton" class="settingButton" onclick="pauseGame();"><strong>PAUSE</strong></button><br><br>
+            <button id="restartButton" class="settingButton" onclick="restartGame();"><strong>RESTART</strong></button><br><br>
+            <button id="backButton" class="settingButton" onclick="back();"><strong>BACK</strong></button>
         </div>
-        <div id="gadget">
+        <div id="settings"><strong>Settings</strong></div>
+        <div id="inventory"></div>
+        <div id="instructionPage">
+            <h1>Game Instructions</h1><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+            <div id="instructionText">ssss</div>
+            <button class="button" onclick="back();"><strong>BACK</strong></button>
+        </div>
+        <div id="gadgetPage">
             <h1>Gadgets Category</h1>
-            <button class="button" onclick="back();"><strong>Back</strong></button>
+            <button class="button" onclick="back();"><strong>BACK</strong></button>
         </div>
         <div id="intro">
             <!--Design an intro image page, falls down one by one to form title card-->
             <br><br><br><br><br><br><br><br><br><br><br><img src="title.png"><br><br><br>
             <h1 style="animation: flash 5s linear infinite;">...Press NEXT to start...</h1>
-            <button class="button" onclick="next();"><strong>Gadgets Category</strong></button>
-            <button class="button" onclick="next();"><strong>INSTRUCTIONS</strong></button>
+            <button class="button" onclick="nextGadget();"><strong>GADGETS CATEGORY</strong></button>
+            <button class="button" onclick="nextInstruct();"><strong>INSTRUCTIONS</strong></button>
             <button class="button" onclick="startGame();"><strong>NEXT</strong></button><br>
-            <!--Selects difficulty-->
-            <input type="range" min="0" max="255" value="198" class="slider" id="difficulty">
+            <!--Selects difficulty
+            <input type="range" min="0" max="255" value="198" class="slider" id="difficulty">-->
         </div>
         <div id="introImg">
             <br><br><br><br><br><img id="transition" src="keyboardTitle.png">

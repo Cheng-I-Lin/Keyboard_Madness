@@ -47,22 +47,50 @@ body{
 #instructionPage{
     position: absolute;
     left: 0vw;
-    top: 0vh;
+    bottom: 0vh;
     width: 100vw;
     height: 100vh;
     color: rgb(244, 225, 133);
     text-align: center;
     background-color: rgb(15, 44, 103);
+    transition: all 1s;
 }
-#gadget{
+#instructionText{
+    position: absolute;
+    left: 10vw;
+    top: 20vh;
+    width: 80vw;
+    height: 60vh;
+    font-size: 2em;
+    text-align: left;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0,0);
+}
+::-webkit-scrollbar-thumb {
+    background: #555;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgb(243, 149, 13);
+}
+::-webkit-scrollbar-corner{
+    display: none;
+}
+#gadgetPage{
     position: absolute;
     left: 0vw;
-    top: 0vh;
+    bottom: 0vh;
     width: 100vw;
     height: 100vh;
     color: rgb(244, 225, 133);
     text-align: center;
     background-color: rgb(15, 44, 103);
+    transition: all 1s;
 }
 .button{
     width: 12.5vw;
@@ -85,5 +113,97 @@ body{
 }
 #drawInput{
     position: absolute;
-    font-size: 2.5em;
+    font-size: 5em;
+    padding: 25px 25px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    color: white;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    opacity: 0;
+}
+#points{
+    position: absolute;
+    left: 1vw;
+    top: 1vh;
+    font-size: 2em;
+    color: white;
+    opacity: 0;
+    transition: all 1s;
+}
+#points:hover{
+    opacity: 1;
+}
+#settings{
+    position: absolute;
+    right: 0%;
+    top: 0%;
+    background-color: rgb(244, 225, 133);
+    text-align: center;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    font-size: 1.25em;
+    padding: 0.5% 3%;
+    opacity: 0;
+    transition: all 1s;
+}
+#settings:hover{
+    padding: 1% 3%;
+    opacity: 1;
+    background-color: rgb(243, 149, 13);
+}
+#settingPage{
+    position: absolute;
+    right: 0vw;
+    top: -26vh;
+    width: 10.4vw;
+    height: 26vh;
+    background-color: rgb(244, 225, 133);
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    transition: all 1s;
+    text-align: center;
+}
+.settingButton{
+    width: 80%;
+    height: 20%;
+    border: rgb(243, 149, 13) 4px solid;
+    background-color: rgb(244, 225, 133);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    transition: all 1s;
+}
+.settingButton:hover{
+    background-color: rgb(243, 149, 13);
+}
+#showInventory{
+    position: absolute;
+    left: 44.75%;
+    bottom: 0%;
+    background-color: rgb(244, 225, 133);
+    text-align: center;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    font-size: 1.25em;
+    padding: 0.5% 3%;
+    transition: all 1s;
+}
+#showInventory:hover{
+    padding: 1% 3%;
+    background-color: rgb(243, 149, 13);
+}
+#inventory{
+    position: absolute;
+    left: 0vw;
+    bottom: -50vh;
+    width: 100vw;
+    height: 50vh;
+    background-color: rgb(244, 225, 133);
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    transition: all 1s;
 }
