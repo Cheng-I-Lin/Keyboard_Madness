@@ -28,11 +28,11 @@ class Meteor{
     }
 }
 
-var blockSpeed=1;
+var blockSpeed=0.5;
 var blockWidth=50;
 var blockHeight=50;
 var blockSymbol="";
-var meteorTime=1000;
+var meteorTime=5000;
 var score=0;
 
 //Intro transitions, 2000, 7000, and 8000
@@ -128,20 +128,28 @@ function back(){
     restartGame();
     settings.style.top="0vh";
     settingPage.style.top="-26vh";
+    showInventory.style.bottom="0vh";
+    inventoryPage.style.bottom="-50vh";
 }
 function startGame(){
     nextInstruct();
     nextGadget();
     //Unpause game
     pause=false;
+    document.getElementById("pauseButton").style.backgroundColor="rgb(244, 225, 133)";
 }
 function restartGame(){
+    num=0;
     dead=false;
     keyInput="";
     allMeteors=[];
     wrongInput=false;
     score=0;
     grid.style.backgroundColor="rgb(15, 44, 103)";
+    for(let i=0;i<box.length;i++){
+        box[i].style.backgroundColor="transparent";
+    }
+    idIndex=-1;
 }
 const showInventory=document.getElementById("showInventory");
 const inventoryPage=document.getElementById("inventory");
@@ -152,7 +160,8 @@ showInventory.addEventListener("click",function(){
     } else{
         showInventory.style.bottom="50vh";
         inventoryPage.style.bottom="0vh";
-    }
+    } 
+    pauseGame();
 });
 const settings=document.getElementById("settings");
 const settingPage=document.getElementById("settingPage");
@@ -165,6 +174,14 @@ settings.addEventListener("click",function(){
         settingPage.style.top="0vh";
     }
 });
+document.getElementById("pauseButton").addEventListener("mouseover",function(){
+    if(document.getElementById("pauseButton").style.backgroundColor!="rgb(243, 149, 13)")
+    document.getElementById("pauseButton").style.backgroundColor="rgb(243, 149, 13)";
+});
+document.getElementById("pauseButton").addEventListener("mouseleave",function(){
+    if(!pause)
+    document.getElementById("pauseButton").style.backgroundColor="rgb(244, 225, 133)";
+});
 function pauseGame(){
     if(pause){
         pause=false;
@@ -173,11 +190,6 @@ function pauseGame(){
         pause=true;
         document.getElementById("pauseButton").style.backgroundColor="rgb(243, 149, 13)";
     }
-}
-
-//Draws the inventory
-function drawInventory(){
-
 }
 
 var wrongInput=false;
@@ -256,62 +268,132 @@ function cancelInputDraw(){
     drawInput.style.opacity="0";
 }
 
-//Use the index from eventlistener to call inventory items
-function callInventory(index){
-    // Use the thing from spacesurvivor, use space bar to activarte?
-    switch(index){
-        case 1:
-            invX=0;
-            invY=0;
-            break;
-        case 2:
-            invX=0;
-            invY=0;
-            break;
-        case 3:
-            invX=0;
-            invY=0;
-            break;
-        case 4:
-            invX=0;
-            invY=0;
-            break;
-        case 5:
-            invX=0;
-            invY=0;
-            break;
-        case 6:
-            invX=0;
-            invY=0;
-            break;
-        case 7:
-            invX=0;
-            invY=0;
-            break;
-        case 8:
-            invX=0;
-            invY=0;
-            break;
-        case 9:
-            invX=0;
-            invY=0;
-            break;
-        case 0:
-            //Cancels selection box and removes item
-            invX=0;
-            invY=0;
-            break;
-        default:
-            break;
+//IDK why hover won't won't with callInventory, so have to code hover effect this way
+const box=document.getElementsByClassName("box");
+box[0].addEventListener("mouseover",function(){
+    if(box[0].style.backgroundColor!="rgb(243, 149, 13)"){
+        box[0].style.backgroundColor="rgba(243, 149, 13, 0.4)";
+    }
+});
+box[0].addEventListener("mouseleave",function(){
+    if(box[0].style.backgroundColor!="rgb(243, 149, 13)"){
+        box[0].style.backgroundColor="transparent";
+    }
+});
+box[1].addEventListener("mouseover",function(){
+    if(box[1].style.backgroundColor!="rgb(243, 149, 13)"){
+        box[1].style.backgroundColor="rgba(243, 149, 13, 0.4)";
+    }
+});
+box[1].addEventListener("mouseleave",function(){
+    if(box[1].style.backgroundColor!="rgb(243, 149, 13)"){
+        box[1].style.backgroundColor="transparent";
+    }
+});
+box[2].addEventListener("mouseover",function(){
+    if(box[2].style.backgroundColor!="rgb(243, 149, 13)"){
+        box[2].style.backgroundColor="rgba(243, 149, 13, 0.4)";
+    }
+});
+box[2].addEventListener("mouseleave",function(){
+    if(box[2].style.backgroundColor!="rgb(243, 149, 13)"){
+        box[2].style.backgroundColor="transparent";
+    }
+});
+box[3].addEventListener("mouseover",function(){
+    if(box[3].style.backgroundColor!="rgb(243, 149, 13)"){
+        box[3].style.backgroundColor="rgba(243, 149, 13, 0.4)";
+    }
+});
+box[3].addEventListener("mouseleave",function(){
+    if(box[3].style.backgroundColor!="rgb(243, 149, 13)"){
+        box[3].style.backgroundColor="transparent";
+    }
+});
+box[4].addEventListener("mouseover",function(){
+    if(box[4].style.backgroundColor!="rgb(243, 149, 13)"){
+        box[4].style.backgroundColor="rgba(243, 149, 13, 0.4)";
+    }
+});
+box[4].addEventListener("mouseleave",function(){
+    if(box[4].style.backgroundColor!="rgb(243, 149, 13)"){
+        box[4].style.backgroundColor="transparent";
+    }
+});
+box[5].addEventListener("mouseover",function(){
+    if(box[5].style.backgroundColor!="rgb(243, 149, 13)"){
+        box[5].style.backgroundColor="rgba(243, 149, 13, 0.4)";
+    }
+});
+box[5].addEventListener("mouseleave",function(){
+    if(box[5].style.backgroundColor!="rgb(243, 149, 13)"){
+        box[5].style.backgroundColor="transparent";
+    }
+});
+box[6].addEventListener("mouseover",function(){
+    if(box[6].style.backgroundColor!="rgb(243, 149, 13)"){
+        box[6].style.backgroundColor="rgba(243, 149, 13, 0.4)";
+    }
+});
+box[6].addEventListener("mouseleave",function(){
+    if(box[6].style.backgroundColor!="rgb(243, 149, 13)"){
+        box[6].style.backgroundColor="transparent";
+    }
+});
+box[7].addEventListener("mouseover",function(){
+    if(box[7].style.backgroundColor!="rgb(243, 149, 13)"){
+        box[7].style.backgroundColor="rgba(243, 149, 13, 0.4)";
+    }
+});
+box[7].addEventListener("mouseleave",function(){
+    if(box[7].style.backgroundColor!="rgb(243, 149, 13)"){
+        box[7].style.backgroundColor="transparent";
+    }
+});
+box[8].addEventListener("mouseover",function(){
+    if(box[8].style.backgroundColor!="rgb(243, 149, 13)"){
+        box[8].style.backgroundColor="rgba(243, 149, 13, 0.4)";
+    }
+});
+box[8].addEventListener("mouseleave",function(){
+    if(box[8].style.backgroundColor!="rgb(243, 149, 13)"){
+        box[8].style.backgroundColor="transparent";
+    }
+});
+box[9].addEventListener("mouseover",function(){
+    if(box[9].style.backgroundColor!="rgb(243, 149, 13)"){
+        box[9].style.backgroundColor="rgba(243, 149, 13, 0.4)";
+    }
+});
+box[9].addEventListener("mouseleave",function(){
+    if(box[9].style.backgroundColor!="rgb(243, 149, 13)"){
+        box[9].style.backgroundColor="transparent";
+    }
+});
+//Use the clicks of div element to determine which item is selected
+var idIndex=-1;
+function callInventory(id){
+    for(let i=0;i<box.length;i++){
+        if(i==parseInt(id.substring(id.length-1))){
+            if(box[i].style.backgroundColor=="rgb(243, 149, 13)"){
+                box[i].style.backgroundColor="transparent";
+            } else{
+                box[i].style.backgroundColor="rgb(243, 149, 13)";
+                idIndex=i;
+            }
+        } else{
+            box[i].style.backgroundColor="transparent";
+        }
     }
 }
 
 //Makes the meteors fall and create new objects
 function game(){
     //There are a total of 50 possible symbols
-    let randomSymbol=Math.floor(Math.random()*51);
+    let randomSymbol=Math.floor(Math.random()*50);
     //Randomize the symbols for the meteors
     switch(randomSymbol){
+        case 10:
         case 11:
         case 12:
         case 13:
@@ -337,50 +419,49 @@ function game(){
         case 33:
         case 34:
         case 35:
-        case 36:
             //Changing number to letter
-            blockSymbol=String.fromCharCode(randomSymbol+54);
+            blockSymbol=String.fromCharCode(randomSymbol+55);
             break;
-        case 37:
+        case 36:
             blockSymbol=",";
             break;
-        case 38:
+        case 37:
             blockSymbol=".";
             break;
-        case 39:
+        case 38:
             blockSymbol="/";
             break;
-        case 40:
+        case 39:
             blockSymbol=";";
             break;
-        case 41:
+        case 40:
             blockSymbol="''";
             break;
-        case 42:
+        case 41:
             blockSymbol="[";
             break;
-        case 43:
+        case 42:
             blockSymbol="]";
             break;
-        case 44:
+        case 43:
             blockSymbol="\\";
             break;
-        case 45:
+        case 44:
             blockSymbol="-";
             break;
-        case 46:
+        case 45:
             blockSymbol="=";
             break;
-        case 47:
+        case 46:
             blockSymbol="↑";
             break;
-        case 48:
+        case 47:
             blockSymbol="←";
             break;
-        case 49:
+        case 48:
             blockSymbol="↓";
             break;
-        case 50:
+        case 49:
             blockSymbol="→";
             break;
         default:
@@ -418,6 +499,10 @@ var num=0;
 //Create meteor objects
 setInterval(function(){
     if(!pause&&!dead){
+        //Changing levels based on scores
+        if(score>10){
+            meteorTime=4000;
+        }
         num++;
         if(num>=meteorTime/4){
             allMeteors.push(new Meteor(Math.random()*(window.innerWidth-blockWidth),-blockHeight));
@@ -438,7 +523,6 @@ setInterval(function(){
         drawInput.style.left=(window.innerWidth-drawInput.offsetWidth)/2+"px";
         drawBackground();
         drawGame();
-        drawInventory();
         game();
     }
 },gameTime);

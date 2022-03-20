@@ -58,10 +58,10 @@ body{
 #instructionText{
     position: absolute;
     left: 10vw;
-    top: 20vh;
+    top: 13vh;
     width: 80vw;
-    height: 60vh;
-    font-size: 2em;
+    height: 65vh;
+    font-size: 1.75em;
     text-align: left;
     overflow-y: scroll;
     overflow-x: hidden;
@@ -206,4 +206,54 @@ body{
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     transition: all 1s;
+}
+.box{
+    position: absolute;
+    width: 20vw;
+    height: 50%;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    transition: backgroundColor 0.5s;
+}
+#item0{
+    left: 0%;
+    top: 0%;
+}
+#item1{
+    left: 20%;
+    top: 0%;
+}
+#item2{
+    left: 40%;
+    top: 0%;
+}
+#item3{
+    left: 60%;
+    top: 0%;
+}
+#item4{
+    left: 80%;
+    top: 0%;
+}
+#item5{
+    left: 0%;
+    top: 50%;
+}
+#item6{
+    left: 20%;
+    top: 50%;
+}
+#item7{
+    left: 40%;
+    top: 50%;
+}
+#item8{
+    left: 60%;
+    top: 50%;
+}
+#item9{
+    left: 80%;
+    top: 50%;
 }

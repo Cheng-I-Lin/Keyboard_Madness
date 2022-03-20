@@ -21,10 +21,33 @@
             <button id="backButton" class="settingButton" onclick="back();"><strong>BACK</strong></button>
         </div>
         <div id="settings"><strong>Settings</strong></div>
-        <div id="inventory"></div>
+        <div id="inventory">
+            <div class="box" id="item0" onclick="callInventory(this.id);"></div>
+            <div class="box" id="item1" onclick="callInventory(this.id);"></div>
+            <div class="box" id="item2" onclick="callInventory(this.id);"></div>
+            <div class="box" id="item3" onclick="callInventory(this.id);"></div>
+            <div class="box" id="item4" onclick="callInventory(this.id);"></div>
+            <div class="box" id="item5" onclick="callInventory(this.id);"></div>
+            <div class="box" id="item6" onclick="callInventory(this.id);"></div>
+            <div class="box" id="item7" onclick="callInventory(this.id);"></div>
+            <div class="box" id="item8" onclick="callInventory(this.id);"></div>
+            <div class="box" id="item9" onclick="callInventory(this.id);"></div>
+        </div>
         <div id="instructionPage">
             <h1>Game Instructions</h1><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-            <div id="instructionText">ssss</div>
+            <div id="instructionText">
+                Do you type fast? If not, you better learn how to do so!<br><br>
+                In <strong style="color: rgb(243, 149, 13);">Keyboard Madness</strong>, multiple objects, 
+                or meteors, with an unique symbol written on each of them, which can be a number, a letter, or any other symbols, will
+                start to slowly fall from the top. If one of those meteors landed on the floor, then the game ends. The objective is to 
+                type in the symbols corresponding to those on the meteors. By doing so, the corresponding meteors will be removed so that
+                they won't collide into the floor, increasing a point for each removed meteors in the total score as well. As the score
+                increases, the degree of difficulty of the game also increases as the speed of meteors, the amount of meteors, and the 
+                number of symbols in each meteor all increase over time. Fortunately, you may use the gadgets earned from removing 
+                meteors to help you score more points by simply clicking on the <strong style="color: rgb(243, 149, 13);">Inventory</strong> icon and select the 
+                necessary gadgets to use. It may seem easy, but once the game started, you would understand the true madness of the 
+                game. <strong>Good luck typing!</strong>
+            </div>
             <button class="button" onclick="back();"><strong>BACK</strong></button>
         </div>
         <div id="gadgetPage">
