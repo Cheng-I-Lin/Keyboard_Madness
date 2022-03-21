@@ -14,24 +14,60 @@
         <canvas id="background" style="position: absolute;"></canvas>
         <canvas id="meteorCanvas" style="position: absolute;"></canvas>
         <div id="points"></div>
+        <!--Shows what item is being used right now-->
+        <div id="currentItemPage">
+            <strong>Current Item</strong><br>
+            <img id="currentItemImg"><br>
+            <strong><span id="currentItem"></span></strong>
+        </div>
         <div id="showInventory"><strong>Inventory</strong></div>
         <div id="settingPage"><br>
             <button id="pauseButton" class="settingButton" onclick="pauseGame();"><strong>PAUSE</strong></button><br><br>
             <button id="restartButton" class="settingButton" onclick="restartGame();"><strong>RESTART</strong></button><br><br>
-            <button id="backButton" class="settingButton" onclick="back();"><strong>BACK</strong></button>
+            <button id="backButton" class="settingButton" onclick="back();"><strong>MAIN SCREEN</strong></button>
         </div>
         <div id="settings"><strong>Settings</strong></div>
         <div id="inventory">
-            <div class="box" id="item0" onclick="callInventory(this.id);"></div>
-            <div class="box" id="item1" onclick="callInventory(this.id);"></div>
-            <div class="box" id="item2" onclick="callInventory(this.id);"></div>
-            <div class="box" id="item3" onclick="callInventory(this.id);"></div>
-            <div class="box" id="item4" onclick="callInventory(this.id);"></div>
-            <div class="box" id="item5" onclick="callInventory(this.id);"></div>
-            <div class="box" id="item6" onclick="callInventory(this.id);"></div>
-            <div class="box" id="item7" onclick="callInventory(this.id);"></div>
-            <div class="box" id="item8" onclick="callInventory(this.id);"></div>
-            <div class="box" id="item9" onclick="callInventory(this.id);"></div>
+            <div class="box" id="item0" onclick="callInventory(this.id);">
+                <strong><span class="itemName"></span></strong><br>
+                <img class="itemImg">
+            </div>
+            <div class="box" id="item1" onclick="callInventory(this.id);">
+                <strong><span class="itemName"></span></strong><br>
+                <img class="itemImg">
+            </div>
+            <div class="box" id="item2" onclick="callInventory(this.id);">
+                <strong><span class="itemName"></span></strong><br>
+                <img class="itemImg">
+            </div>
+            <div class="box" id="item3" onclick="callInventory(this.id);">
+                <strong><span class="itemName"></span></strong><br>
+                <img class="itemImg">
+            </div>
+            <div class="box" id="item4" onclick="callInventory(this.id);">
+                <strong><span class="itemName"></span></strong><br>
+                <img class="itemImg">
+            </div>
+            <div class="box" id="item5" onclick="callInventory(this.id);">
+                <strong><span class="itemName"></span></strong><br>
+                <img class="itemImg">
+            </div>
+            <div class="box" id="item6" onclick="callInventory(this.id);">
+                <strong><span class="itemName"></span></strong><br>
+                <img class="itemImg">
+            </div>
+            <div class="box" id="item7" onclick="callInventory(this.id);">
+                <strong><span class="itemName"></span></strong><br>
+                <img class="itemImg">
+            </div>
+            <div class="box" id="item8" onclick="callInventory(this.id);">
+                <strong><span class="itemName"></span></strong><br>
+                <img class="itemImg">
+            </div>
+            <div class="box" id="item9" onclick="callInventory(this.id);">
+                <strong><span class="itemName"></span></strong><br>
+                <img class="itemImg">
+            </div>
         </div>
         <div id="instructionPage">
             <h1>Game Instructions</h1><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
@@ -47,11 +83,55 @@
                 meteors to help you score more points by simply clicking on the <strong style="color: rgb(243, 149, 13);">Inventory</strong> icon and select the 
                 necessary gadgets to use. It may seem easy, but once the game started, you would understand the true madness of the 
                 game. <strong>Good luck typing!</strong>
+                <!--show different types of meteors and how to resolve them-->
             </div>
             <button class="button" onclick="back();"><strong>BACK</strong></button>
         </div>
         <div id="gadgetPage">
-            <h1>Gadgets Category</h1>
+            <h1>Gadgets Category</h1><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+            <div id="gadgetText">
+                <img class="gadgetImg" id="img1">
+                <div class="gadgetInfo" id="gadget1"></div>
+                <img class="gadgetImg" id="img2">
+                <div class="gadgetInfo" id="gadget2"></div>
+                <img class="gadgetImg" id="img3">
+                <div class="gadgetInfo" id="gadget3"></div>
+                <img class="gadgetImg" id="img4">
+                <div class="gadgetInfo" id="gadget4"></div>
+                <img class="gadgetImg" id="img5">
+                <div class="gadgetInfo" id="gadget5"></div>
+                <img class="gadgetImg" id="img6">
+                <div class="gadgetInfo" id="gadget6"></div>
+                <img class="gadgetImg" id="img7">
+                <div class="gadgetInfo" id="gadget7"></div>
+                <img class="gadgetImg" id="img8">
+                <div class="gadgetInfo" id="gadget8"></div>
+                <img class="gadgetImg" id="img9">
+                <div class="gadgetInfo" id="gadget9"></div>
+                <img class="gadgetImg" id="img10">
+                <div class="gadgetInfo" id="gadget10"></div>
+                <img class="gadgetImg" id="img11">
+                <div class="gadgetInfo" id="gadget11"></div>
+                <img class="gadgetImg" id="img12">
+                <div class="gadgetInfo" id="gadget12"></div>
+                <img class="gadgetImg" id="img13">
+                <div class="gadgetInfo" id="gadget13"></div>
+                <img class="gadgetImg" id="img14">
+                <div class="gadgetInfo" id="gadget14"></div>
+                <img class="gadgetImg" id="img15">
+                <div class="gadgetInfo" id="gadget15"></div>
+                <img class="gadgetImg" id="img16">
+                <div class="gadgetInfo" id="gadget16"></div>
+                <img class="gadgetImg" id="img17">
+                <div class="gadgetInfo" id="gadget17"></div>
+                <img class="gadgetImg" id="img18">
+                <div class="gadgetInfo" id="gadget18"></div>
+                <img class="gadgetImg" id="img19">
+                <div class="gadgetInfo" id="gadget19"></div>
+                <img class="gadgetImg" id="img20">
+                <div class="gadgetInfo" id="gadget20"></div>
+                
+            </div>
             <button class="button" onclick="back();"><strong>BACK</strong></button>
         </div>
         <div id="intro">

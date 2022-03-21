@@ -56,9 +56,6 @@ var dead=false;
 var allMeteors=[];
 //Use magic items to slow time, break meteors, etc(access them by using 1,2,3,4,5,6,7,8,9, 0 can be used to throw away things to create space)
 var inventory=[];
-//Used to determine the position of the red selection box
-var invX=0;
-var invY=0;
 //Use to store the inputs player made
 var inputKeys=[];
 //Background floor
@@ -150,6 +147,7 @@ function restartGame(){
         box[i].style.backgroundColor="transparent";
     }
     idIndex=-1;
+    bonus=0;
 }
 const showInventory=document.getElementById("showInventory");
 const inventoryPage=document.getElementById("inventory");
@@ -387,6 +385,8 @@ function callInventory(id){
     }
 }
 
+//Used to see if should give bonus or not
+var bonus=0;
 //Makes the meteors fall and create new objects
 function game(){
     //There are a total of 50 possible symbols
@@ -486,12 +486,72 @@ function game(){
                     allMeteors[i].shouldDraw=false;
                 },1000);
                 score++;
+                bonus++;
+                if(bonus==100){
+                    //Provide a random item to the inventory for every 100 points
+                    if(inventory.length<10){
+                        inventory.push(Math.random()*20);
+                    }
+                    bonus=0;
+                }
             } 
         }
     }
     //Game ends if the input is not on any of the meteors
     if(wrongInput){
         dead=true;
+    }
+}
+
+//Draws all inventory items
+function drawItem(){
+    let currentItem=document.getElementById("currentItem");
+    let currentItemImg=document.getElementById("currentItemImg");
+    for(let i=0;inventory.length;i++){
+        switch(inventory[i]){
+            case 0:
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+            case 7:
+                break;
+            case 8:
+                break;
+            case 9:
+                break;
+            case 10:
+                break;
+            case 11:
+                break;
+            case 12:
+                break;
+            case 13:
+                break;
+            case 14:
+                break;
+            case 15:
+                break;
+            case 16:
+                break;
+            case 17:
+                break;
+            case 18:
+                break;
+            case 19:
+                break;
+            default:
+                break;
+        }
     }
 }
 
@@ -532,4 +592,26 @@ Height can be an extra line of symbols where player has to click the things in t
 Inventory can reduce floor height: extra time to clear meteors
 Inventory can add power up but also bring consequences, such as increasing floor height
 Player can have 3 lives, if press wrong keys then minus 1 so they can't keep clicking
+
+Inventory Item Ideas:
+1. Lower Elevation: lowers floor height
+2. Eraser: clears all meteors on the screen
+3. Stop(new name): stops all meteor, speed to 0
+4. Less Meteor(new name): increase meteortime, less meteor appear
+5. Immunity: one death doesn't count(only can activate one at a time)
+6. Helper(new name): 20%(or another %) chance of getting rid of one meteor
+7. Hot Streak: plus 2 points each time a meteor is removed in duration of 5 seconds
+8. Juggernaut: create a smashing block that keeps moving slowly(or fast) from one end to another, touch meteors die
+9. Omnipitent: all keys work on everything
+10. Sacrificial Lamb(new name): throw away all inventory, each adding 2 points to the score
+11. Positive Trade: increase floor height but random gets one more item
+12. Shuffle: shuffles and changes all items in the inventory to new ones
+13. Rewind: pushes all meteor upwards
+14. Primitives: decrease all meteor to having only one symbol
+15. Digits Only: only digit symbols for 10s
+16. Letters Only: only letter symbols for 10s
+17. Symbols Only: only symbols for 10s
+18. Arrows Only: only arrow symbols for 10s
+19. Restricted Area: a random area of about 100px gets blocked, every meteor that forms there dies instantly
+20. Infinity Barrier: slows down meteor speed
 */

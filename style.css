@@ -66,6 +66,17 @@ body{
     overflow-y: scroll;
     overflow-x: hidden;
 }
+#gadgetText{
+    position: absolute;
+    left: 10vw;
+    top: 13vh;
+    width: 80vw;
+    height: 65vh;
+    font-size: 1.5em;
+    text-align: left;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
 ::-webkit-scrollbar {
     width: 10px;
 }
@@ -126,14 +137,35 @@ body{
 }
 #points{
     position: absolute;
-    left: 1vw;
-    top: 1vh;
+    left: 0vw;
+    top: 0vh;
+    padding-top: 1vh;
+    width: 100vw;
+    height: 5vh;
     font-size: 2em;
     color: white;
     opacity: 0;
+    text-align: center;
     transition: all 1s;
 }
 #points:hover{
+    opacity: 1;
+}
+#currentItemPage{
+    position: absolute;
+    left: 0vw;
+    top: 0vh;
+    width: 15vw;
+    height: 15vw;
+    background-color: rgb(244, 225, 133);
+    transition: all 1s;
+    opacity: 0;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    text-align: center;
+    font-size: 1.5em;
+}
+#currentItemPage:hover{
     opacity: 1;
 }
 #settings{
