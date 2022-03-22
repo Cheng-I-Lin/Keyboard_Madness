@@ -164,6 +164,7 @@ body{
     border-bottom-right-radius: 20px;
     text-align: center;
     font-size: 1.5em;
+    border: rgb(243, 149, 13) 4px solid;
 }
 #currentItemPage:hover{
     opacity: 1;
@@ -243,6 +244,9 @@ body{
     position: absolute;
     width: 20vw;
     height: 50%;
+    text-align: center;
+    font-size: 1.1em;
+    padding-top: 1%;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     border-bottom-left-radius: 15px;

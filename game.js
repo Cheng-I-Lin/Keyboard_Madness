@@ -65,6 +65,15 @@ var floor={
 }
 //Initialize y position for floor
 floor.y=window.innerHeight-floor.height;
+//Extra life
+var immune=false;
+//All keys work
+var omnipitent=false;
+var letterOnly=false;
+var numOnly=false;
+var symbolOnly=false;
+var arrowOnly=false;
+var Juggernaut=false;
 
 function drawBackground(){
     let canvas=document.getElementById("background");
@@ -140,6 +149,7 @@ function restartGame(){
     dead=false;
     keyInput="";
     allMeteors=[];
+    inventory=[];
     wrongInput=false;
     score=0;
     grid.style.backgroundColor="rgb(15, 44, 103)";
@@ -148,6 +158,13 @@ function restartGame(){
     }
     idIndex=-1;
     bonus=0;
+    immune=false;
+    omnipitent=false;
+    letterOnly=false;
+    numOnly=false;
+    symbolOnly=false;
+    arrowOnly=false;
+    var Juggernaut=false;
 }
 const showInventory=document.getElementById("showInventory");
 const inventoryPage=document.getElementById("inventory");
@@ -155,11 +172,17 @@ showInventory.addEventListener("click",function(){
     if(showInventory.style.bottom=="50vh"){
         showInventory.style.bottom="0vh";
         inventoryPage.style.bottom="-50vh";
+        //Give player more time to prepare, idk y pauseGame function doesn;t work here
+        setTimeout(function(){
+            pause=false;
+            document.getElementById("pauseButton").style.backgroundColor="rgb(244, 225, 133)";
+        },3000);
     } else{
         showInventory.style.bottom="50vh";
         inventoryPage.style.bottom="0vh";
-    } 
-    pauseGame();
+        pause=true;
+        document.getElementById("pauseButton").style.backgroundColor="rgb(243, 149, 13)";
+    }
 });
 const settings=document.getElementById("settings");
 const settingPage=document.getElementById("settingPage");
@@ -254,11 +277,102 @@ document.addEventListener("keyup",function(key){
             }
         } else{
             drawInput.style.opacity="0";
-            keyInput="";
+            if(key.code!="Space"){
+                keyInput="";
+            } else{
+                keyInput="Space";
+            }
         }
         //Cancels input display after a while
         setTimeout(cancelInputDraw,1500);
         wrongInput=true;
+        //Activates the item power selected
+        if(key.code=="Space"){
+            switch(inventory[idIndex]){
+                case 0:
+                    floor.y+=25;
+                    floor.height-=25;
+                    break;
+                case 1:
+                    for(let i=0;i<allMeteors.length;i++){
+                        allMeteors[i].resolved();
+                        setTimeout(function(){
+                            allMeteors[i].shouldDraw=false;
+                        },1000);
+                    }
+                    break;
+                case 2:
+                    //Need to stop the production of meteors as well
+                    for(let i=0;i<allMeteors.length;i++){
+                        allMeteors[i].speed=0;
+                    }
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    immune=true;
+                    break;
+                case 5:
+                    break;
+                case 6:
+                    break;
+                case 7:
+                    break;
+                case 8:
+                    omnipitent=true;
+                    break;
+                case 9:
+                    break;
+                case 10:
+                    if(inventory.length!=10){
+                        floor.y-=25;
+                        floor.height+=25;
+                        inventory.push(Math.floor(Math.random()*20));
+                    }
+                    break;
+                case 11:
+                    for(let i=0;i<inventory.length;i++){
+                        inventory[i]=Math.floor(Math.random()*20);
+                    }
+                    break;
+                case 12:
+                    for(let i=0;i<allMeteors.length;i++){
+                        allMeteors[i].y-=200;
+                    }
+                    break;
+                case 13:
+                    break;
+                case 14:
+                    numOnly=true;
+                    break;
+                case 15:
+                    letterOnly=true;
+                    break;
+                case 16:
+                    symbolOnly=true;
+                    break;
+                case 17:
+                    arrowOnly=true;
+                    break;
+                case 18:
+                    break;
+                case 19:
+                    for(let i=0;i<allMeteors.length;i++){
+                        allMeteors[i].speed=0.25;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            if(idIndex!=-1)
+            inventory.splice(idIndex,1);
+            //Reset the index selection
+            idIndex=-1;
+            //Redraws the color of the selected box
+            for(let i=0;i<box.length;i++){
+                box[i].style.backgroundColor="transparent";
+            }
+        }
     }
 });
 
@@ -375,6 +489,7 @@ function callInventory(id){
         if(i==parseInt(id.substring(id.length-1))){
             if(box[i].style.backgroundColor=="rgb(243, 149, 13)"){
                 box[i].style.backgroundColor="transparent";
+                idIndex=-1;
             } else{
                 box[i].style.backgroundColor="rgb(243, 149, 13)";
                 idIndex=i;
@@ -475,7 +590,15 @@ function game(){
         } else{
             //Only when meteor is not dead will it end the game when touch floor
             if(!allMeteors[i].dead){
-                dead=true;
+                if(immune){
+                    allMeteors[i].resolved();
+                    setTimeout(function(){
+                        allMeteors[i].shouldDraw=false;
+                    },1000);
+                    immune=false;
+                } else{
+                    dead=true;
+                }
             }
         }
         if(!allMeteors[i].dead){
@@ -490,7 +613,7 @@ function game(){
                 if(bonus==100){
                     //Provide a random item to the inventory for every 100 points
                     if(inventory.length<10){
-                        inventory.push(Math.random()*20);
+                        inventory.push(Math.floor(Math.random()*20));
                     }
                     bonus=0;
                 }
@@ -498,63 +621,110 @@ function game(){
         }
     }
     //Game ends if the input is not on any of the meteors
-    if(wrongInput){
+    if(wrongInput&&keyInput!="Space"){
         dead=true;
     }
 }
 
-//Draws all inventory items
+//Draws all inventory items(change how current item works, should be when selected)
 function drawItem(){
-    let currentItem=document.getElementById("currentItem");
-    let currentItemImg=document.getElementById("currentItemImg");
-    for(let i=0;inventory.length;i++){
+    let item=document.getElementsByClassName("itemName");
+    let itemImg=document.getElementsByClassName("itemImg");
+    for(let i=0;i<inventory.length;i++){
         switch(inventory[i]){
             case 0:
+                item[i].innerHTML="Lower Elevation";
+                itemImg[i].src="";
                 break;
             case 1:
+                item[i].innerHTML="Magical Eraser";
+                itemImg[i].src="";
                 break;
             case 2:
+                item[i].innerHTML="Time Quiescence";
+                itemImg[i].src="";
                 break;
             case 3:
+                item[i].innerHTML="Meteor Reduction";
+                itemImg[i].src="";
                 break;
             case 4:
+                item[i].innerHTML="Immunity";
+                itemImg[i].src="";
                 break;
             case 5:
+                item[i].innerHTML="Lucky Charm";
+                itemImg[i].src="";
                 break;
             case 6:
+                item[i].innerHTML="Hot Streak";
+                itemImg[i].src="";
                 break;
             case 7:
+                item[i].innerHTML="Juggernaut";
+                itemImg[i].src="";
                 break;
             case 8:
+                item[i].innerHTML="Omnipotent";
+                itemImg[i].src="";
                 break;
             case 9:
+                item[i].innerHTML="All-In Gambit";
+                itemImg[i].src="";
                 break;
             case 10:
+                item[i].innerHTML="Positive Trade";
+                itemImg[i].src="";
                 break;
             case 11:
+                item[i].innerHTML="Shuffle";
+                itemImg[i].src="";
                 break;
             case 12:
+                item[i].innerHTML="Time Rewind";
+                itemImg[i].src="";
                 break;
             case 13:
+                item[i].innerHTML="Primitive Meteors";
+                itemImg[i].src="";
                 break;
             case 14:
+                item[i].innerHTML="Digits Only";
+                itemImg[i].src="";
                 break;
             case 15:
+                item[i].innerHTML="Letters Only";
+                itemImg[i].src="";
                 break;
             case 16:
+                item[i].innerHTML="Symbols Only";
+                itemImg[i].src="";
                 break;
             case 17:
+                item[i].innerHTML="Arrows Only";
+                itemImg[i].src="";
                 break;
             case 18:
+                item[i].innerHTML="Restricted Area";
+                itemImg[i].src="";
                 break;
             case 19:
+                item[i].innerHTML="Infinity Barrier";
+                itemImg[i].src="";
                 break;
             default:
                 break;
         }
     }
+    //Input no item if there is no item in the slot
+    if(inventory.length<10){
+        for(let i=10;i>inventory.length;i--){
+            item[i-1].innerHTML="No Item";
+            itemImg[i-1].src="";
+        }
+    }
 }
-
+inventory=[1,2,3,4,5,6,7,8,9,11]
 var num=0;
 //Create meteor objects
 setInterval(function(){
@@ -569,20 +739,110 @@ setInterval(function(){
             num=0;
         }
     }
+    document.getElementById("hi").innerHTML=inventory+"       "+idIndex;
 });
 
 setInterval(function(){
     document.getElementById("points").innerHTML="Score: "+score;
+    let currentItem=document.getElementById("currentItem");
+    let currentItemImg=document.getElementById("currentItemImg");
     if(dead){
         grid.style.backgroundColor="rgb(205, 24, 24)";
     } else{
         grid.style.backgroundColor="rgb(15, 44, 103)";
+        switch(inventory[idIndex]){
+            case 0:
+                currentItem.innerHTML="Lower Elevation";
+                currentItemImg.src="";
+                break;
+            case 1:
+                currentItem.innerHTML="Magical Eraser";
+                currentItemImg.src="";
+                break;
+            case 2:
+                currentItem.innerHTML="Time Quiescence";
+                currentItemImg.src="";
+                break;
+            case 3:
+                currentItem.innerHTML="Meteor Reduction";
+                currentItemImg.src="";
+                break;
+            case 4:
+                currentItem.innerHTML="Immunity";
+                currentItemImg.src="";
+                break;
+            case 5:
+                currentItem.innerHTML="Lucky Charm";
+                currentItemImg.src="";
+                break;
+            case 6:
+                currentItem.innerHTML="Hot Streak";
+                currentItemImg.src="";
+                break;
+            case 7:
+                currentItem.innerHTML="Juggernaut";
+                currentItemImg.src="";
+                break;
+            case 8:
+                currentItem.innerHTML="Omnipotent";
+                currentItemImg.src="";
+                break;
+            case 9:
+                currentItem.innerHTML="All-In Gambit";
+                currentItemImg.src="";
+                break;
+            case 10:
+                currentItem.innerHTML="Positive Trade";
+                currentItemImg.src="";
+                break;
+            case 11:
+                currentItem.innerHTML="Shuffle";
+                currentItemImg.src="";
+                break;
+            case 12:
+                currentItem.innerHTML="Time Rewind";
+                currentItemImg.src="";
+                break;
+            case 13:
+                currentItem.innerHTML="Primitive Meteors";
+                currentItemImg.src="";
+                break;
+            case 14:
+                currentItem.innerHTML="Digits Only";
+                currentItemImg.src="";
+                break;
+            case 15:
+                currentItem.innerHTML="Letters Only";
+                currentItemImg.src="";
+                break;
+            case 16:
+                currentItem.innerHTML="Symbols Only";
+                currentItemImg.src="";
+                break;
+            case 17:
+                currentItem.innerHTML="Arrows Only";
+                currentItemImg.src="";
+                break;
+            case 18:
+                currentItem.innerHTML="Restricted Area";
+                currentItemImg.src="";
+                break;
+            case 19:
+                currentItem.innerHTML="Infinity Barrier";
+                currentItemImg.src="";
+                break;
+            default:
+                currentItem.innerHTML="No Item Selected";
+                currentItemImg.src="";
+                break;
+        }
     }
     if(!pause&&!dead){
         drawInput.style.top=(window.innerHeight-drawInput.offsetHeight-floor.height)/2+"px";
         drawInput.style.left=(window.innerWidth-drawInput.offsetWidth)/2+"px";
         drawBackground();
         drawGame();
+        drawItem();
         game();
     }
 },gameTime);

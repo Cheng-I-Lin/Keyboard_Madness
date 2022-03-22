@@ -20,13 +20,15 @@
             <img id="currentItemImg"><br>
             <strong><span id="currentItem"></span></strong>
         </div>
-        <div id="showInventory"><strong>Inventory</strong></div>
         <div id="settingPage"><br>
             <button id="pauseButton" class="settingButton" onclick="pauseGame();"><strong>PAUSE</strong></button><br><br>
             <button id="restartButton" class="settingButton" onclick="restartGame();"><strong>RESTART</strong></button><br><br>
             <button id="backButton" class="settingButton" onclick="back();"><strong>MAIN SCREEN</strong></button>
         </div>
         <div id="settings"><strong>Settings</strong></div>
+        <!--Draws the inputs-->
+        <div id="drawInput"></div>
+        <div id="showInventory"><strong>Inventory</strong></div>
         <div id="inventory">
             <div class="box" id="item0" onclick="callInventory(this.id);">
                 <strong><span class="itemName"></span></strong><br>
@@ -148,13 +150,7 @@
             <br><br><br><br><br><img id="transition" src="keyboardTitle.png">
             <img id="img" src="keyboard.png"><br>
         </div>
-        <!--Draws the inputs-->
-        <div id="drawInput"></div>
-        <!--Can call inventory to use items-->
-        <canvas id="inventory" style="position: absolute;"></canvas>
-        <!--Opens up inventory-->
-        <div id="openInventory"></div>
-        <h1 id="hi" style="position: absolute; top: 0%;"></h1>
+        <h1 id="hi" style="position: absolute; top: 0%; color: aliceblue;"></h1>
     </body>
     <script src="game.js"></script>
 </html>
