@@ -35,18 +35,20 @@ var blockSymbol="";
 var meteorTime=5000;
 var score=0;
 
-//Intro transitions, 2000, 7000, and 8000
+//Intro transitions 2000
 setTimeout(function(){
     document.getElementById("img").style.opacity=0;
+    document.getElementById("clickAnywhere").style.display="block";
     document.getElementById("transition").style.opacity=1;
 },2);
-setTimeout(function(){
-    document.getElementById("introImg").style.opacity=0;
-},7);
 //Hides this page so hover button will work
-setTimeout(function(){
-    document.getElementById("introImg").style.display="none";
-},8);
+document.getElementById("introImg").addEventListener("click", function(){
+    document.getElementById("introImg").style.opacity=0;
+    introMusic();
+    setTimeout(function(){
+        document.getElementById("introImg").style.display="none";
+    },1000);
+});
 
 var gameTime=20;
 const grid=document.getElementById("grid");
@@ -73,7 +75,7 @@ var letterOnly=false;
 var numOnly=false;
 var symbolOnly=false;
 var arrowOnly=false;
-var Juggernaut=false;
+var juggernaut=false;
 
 function drawBackground(){
     let canvas=document.getElementById("background");
@@ -136,6 +138,7 @@ function back(){
     settingPage.style.top="-26vh";
     showInventory.style.bottom="0vh";
     inventoryPage.style.bottom="-50vh";
+    introMusic();
 }
 function startGame(){
     nextInstruct();
@@ -143,6 +146,7 @@ function startGame(){
     //Unpause game
     pause=false;
     document.getElementById("pauseButton").style.backgroundColor="rgb(244, 225, 133)";
+    introMusicStop();
 }
 function restartGame(){
     num=0;
@@ -158,13 +162,14 @@ function restartGame(){
     }
     idIndex=-1;
     bonus=0;
+    levelTime=0
     immune=false;
     omnipitent=false;
     letterOnly=false;
     numOnly=false;
     symbolOnly=false;
     arrowOnly=false;
-    var Juggernaut=false;
+    juggernaut=false;
 }
 const showInventory=document.getElementById("showInventory");
 const inventoryPage=document.getElementById("inventory");
@@ -183,6 +188,7 @@ showInventory.addEventListener("click",function(){
         pause=true;
         document.getElementById("pauseButton").style.backgroundColor="rgb(243, 149, 13)";
     }
+    transitionSound();
 });
 const settings=document.getElementById("settings");
 const settingPage=document.getElementById("settingPage");
@@ -194,6 +200,7 @@ settings.addEventListener("click",function(){
         settings.style.top="24vh";
         settingPage.style.top="0vh";
     }
+    transitionSound();
 });
 document.getElementById("pauseButton").addEventListener("mouseover",function(){
     if(document.getElementById("pauseButton").style.backgroundColor!="rgb(243, 149, 13)")
@@ -212,7 +219,31 @@ function pauseGame(){
         document.getElementById("pauseButton").style.backgroundColor="rgb(243, 149, 13)";
     }
 }
+//Adding sounds to the game from https://mixkit.co/free-sound-effects/game/
+function transitionSound(){
+    let audio=new Audio("notificationSound.mp3");
+    audio.play();
+}
+function playGameOver(){
+    let audio=new Audio("gameoverSound.mp3");
+    audio.loop=false;
+    audio.play();
+}
+var audioIntro=new Audio("introMusic.mp3");
+function introMusic(){
+    audioIntro.loop=true;
+    audioIntro.play();
+}
+//Stops intro music when game starts
+function introMusicStop(){
+    audioIntro.pause();
+}
+function removeMeteor(){
+    let audio=new Audio("removeMeteor.mp3");
+    audio.play();
+}
 
+const itemUsed=document.getElementById("itemUsed");
 var wrongInput=false;
 var keyInput="";
 //Get player keyboard inputs
@@ -292,36 +323,62 @@ document.addEventListener("keyup",function(key){
                 case 0:
                     floor.y+=25;
                     floor.height-=25;
+                    itemUsed.innerHTML="Lower Elevation";
                     break;
                 case 1:
+                    removeMeteor();
                     for(let i=0;i<allMeteors.length;i++){
-                        allMeteors[i].resolved();
+                        if(!allMeteors[i].dead){
+                            allMeteors[i].resolved();
+                            //Add score
+                            score++;
+                            bonus++;
+                            levelTime++;
+                        }
                         setTimeout(function(){
                             allMeteors[i].shouldDraw=false;
                         },1000);
                     }
+                    itemUsed.innerHTML="Magical Eraser";
                     break;
                 case 2:
                     //Need to stop the production of meteors as well
                     for(let i=0;i<allMeteors.length;i++){
                         allMeteors[i].speed=0;
                     }
+                    itemUsed.innerHTML="Time Quiescence";
                     break;
                 case 3:
+                    meteorTime+=100;
+                    itemUsed.innerHTML="Meteor Reduction";
                     break;
                 case 4:
+                    //Think about how to stop repeating and using up immunity when immuned already
                     immune=true;
+                    itemUsed.innerHTML="Immunity";
                     break;
                 case 5:
+                    itemUsed.innerHTML="Luky Charm";
                     break;
                 case 6:
+                    itemUsed.innerHTML="Hot Streak";
                     break;
                 case 7:
+                    juggernaut=true;
+                    itemUsed.innerHTML="Juggernaut";
                     break;
                 case 8:
                     omnipitent=true;
+                    itemUsed.innerHTML="Omnipotent";
                     break;
                 case 9:
+                    //Add 5 points for every item
+                    for(let i=0;i<inventory.length;i++){
+                        score+=5;
+                    } 
+                    //Delete all item
+                    inventory=[];
+                    itemUsed.innerHTML="All-In Gambit";
                     break;
                 case 10:
                     if(inventory.length!=10){
@@ -329,39 +386,50 @@ document.addEventListener("keyup",function(key){
                         floor.height+=25;
                         inventory.push(Math.floor(Math.random()*20));
                     }
+                    itemUsed.innerHTML="Positive Trade";
                     break;
                 case 11:
                     for(let i=0;i<inventory.length;i++){
                         inventory[i]=Math.floor(Math.random()*20);
                     }
+                    itemUsed.innerHTML="Shuffle";
                     break;
                 case 12:
                     for(let i=0;i<allMeteors.length;i++){
                         allMeteors[i].y-=200;
                     }
+                    itemUsed.innerHTML="Time Rewind";
                     break;
                 case 13:
+                    itemUsed.innerHTML="Primitive Meteors";
                     break;
                 case 14:
                     numOnly=true;
+                    itemUsed.innerHTML="Digits Only";
                     break;
                 case 15:
                     letterOnly=true;
+                    itemUsed.innerHTML="Letters Only";
                     break;
                 case 16:
                     symbolOnly=true;
+                    itemUsed.innerHTML="Symbols Only";
                     break;
                 case 17:
                     arrowOnly=true;
+                    itemUsed.innerHTML="Arrows Only";
                     break;
                 case 18:
+                    itemUsed.innerHTML="Restricted Area";
                     break;
                 case 19:
                     for(let i=0;i<allMeteors.length;i++){
                         allMeteors[i].speed=0.25;
                     }
+                    itemUsed.innerHTML="Infinity Barrier";
                     break;
-                default:
+                default: 
+                    itemUsed.innerHTML="No Item Selected";
                     break;
             }
             if(idIndex!=-1)
@@ -372,6 +440,11 @@ document.addEventListener("keyup",function(key){
             for(let i=0;i<box.length;i++){
                 box[i].style.backgroundColor="transparent";
             }
+            //Shows which item is being used
+            itemUsed.style.opacity="1";
+            setTimeout(function(){
+                itemUsed.style.opacity="0";
+            },1500);
         }
     }
 });
@@ -598,11 +671,13 @@ function game(){
                     immune=false;
                 } else{
                     dead=true;
+                    playGameOver();
                 }
             }
         }
         if(!allMeteors[i].dead){
             if(keyInput==allMeteors[i].symbol){
+                removeMeteor();
                 wrongInput=false;
                 allMeteors[i].resolved();
                 setTimeout(function(){
@@ -610,6 +685,7 @@ function game(){
                 },1000);
                 score++;
                 bonus++;
+                levelTime++;
                 if(bonus==100){
                     //Provide a random item to the inventory for every 100 points
                     if(inventory.length<10){
@@ -623,6 +699,7 @@ function game(){
     //Game ends if the input is not on any of the meteors
     if(wrongInput&&keyInput!="Space"){
         dead=true;
+        playGameOver();
     }
 }
 
@@ -724,14 +801,18 @@ function drawItem(){
         }
     }
 }
-inventory=[1,2,3,4,5,6,7,8,9,11]
+inventory=[1,2,3,4,5,6,7,8,9,11];
 var num=0;
+var levelTime=0;
 //Create meteor objects
 setInterval(function(){
     if(!pause&&!dead){
-        //Changing levels based on scores
-        if(score>10){
-            meteorTime=4000;
+        //Changing levels based on scores(every 50 minus 50)
+        if(meteorTime>50){
+            if(levelTime==50){
+                meteorTime-=50;
+                levelTime=0;
+            }
         }
         num++;
         if(num>=meteorTime/4){
@@ -840,6 +921,8 @@ setInterval(function(){
     if(!pause&&!dead){
         drawInput.style.top=(window.innerHeight-drawInput.offsetHeight-floor.height)/2+"px";
         drawInput.style.left=(window.innerWidth-drawInput.offsetWidth)/2+"px";
+        itemUsed.style.top=(window.innerHeight-itemUsed.offsetHeight-floor.height)/2+"px";
+        itemUsed.style.left=(window.innerWidth-itemUsed.offsetWidth)/2+"px";
         drawBackground();
         drawGame();
         drawItem();
@@ -863,7 +946,7 @@ Inventory Item Ideas:
 7. Hot Streak: plus 2 points each time a meteor is removed in duration of 5 seconds
 8. Juggernaut: create a smashing block that keeps moving slowly(or fast) from one end to another, touch meteors die
 9. Omnipitent: all keys work on everything
-10. Sacrificial Lamb(new name): throw away all inventory, each adding 2 points to the score
+10. Sacrificial Lamb(new name): throw away all inventory, each adding 5 points to the score
 11. Positive Trade: increase floor height but random gets one more item
 12. Shuffle: shuffles and changes all items in the inventory to new ones
 13. Rewind: pushes all meteor upwards

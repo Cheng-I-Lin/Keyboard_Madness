@@ -122,7 +122,24 @@ body{
     50%{opacity: 1;}
     100%{opacity: 0;}
 }
+#clickAnywhere{
+    display: none;
+    animation: flash 5s infinite linear;
+}
 #drawInput{
+    position: absolute;
+    font-size: 5em;
+    padding: 25px 25px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    color: white;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    opacity: 0;
+}
+#itemUsed{
     position: absolute;
     font-size: 5em;
     padding: 25px 25px;
