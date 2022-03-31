@@ -174,7 +174,7 @@ body{
     top: 0vh;
     width: 15vw;
     height: 15vw;
-    background-color: rgb(244, 225, 133);
+    background-color: rgba(244, 225, 133, 0.75);
     transition: all 1s;
     opacity: 0;
     border-bottom-left-radius: 20px;
