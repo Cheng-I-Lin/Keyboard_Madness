@@ -115,92 +115,93 @@ function drawGame(){
         }
         if(allMeteors[i].shouldDraw){
             let levelX=0;
-            for(let j=0;j<allMeteors[i].level;j++){
+            //Only draws up to 5 levels
+            for(let j=0;j<Math.min(allMeteors[i].level,5);j++){
                 dp.fillRect(allMeteors[i].x+levelX,allMeteors[i].y,allMeteors[i].width,allMeteors[i].height);
                 levelX+=allMeteors[i].width;
             }
             dp.fillStyle="white";
             dp.font="30px Arial";
             let offsetx=0;
-            //Makes the drawing of each symbol centered in each meteor
-            switch(allMeteors[i].symbol){
-                case "G":
-                case "U":
-                case "C":
-                case "Q":
-                    offsetx=14;
-                    break;
-                case "M":
-                    offsetx=13;
-                    break;
-                case "W":
-                    offsetx=12;
-                    break;
-                case "L":
-                    offsetx=16;
-                    break;
-                case "A":
-                case "B":
-                case "D":
-                case "E":
-                case "F":
-                case "H":
-                case "J":
-                case "K":
-                case "N":
-                case "O":
-                case "P":
-                case "R":
-                case "S":
-                case "T":
-                case "V":
-                case "X":
-                case "Y":
-                case "Z":
-                    offsetx=15;
-                    break;
-                case "I":
-                    offsetx=21;
-                    break;
-                case "1":
-                case "2":
-                case "3":
-                case "4":
-                case "5":
-                case "6":
-                case "7":
-                case "8":
-                case "9":
-                case "0":
-                    offsetx=17;
-                    break;
-                case "[":
-                case "]":
-                case ";":
-                case "\\":
-                case "/":
-                case ".":
-                case ",":
-                    offsetx=22;
-                    break;
-                case "''":
-                    offsetx=19;
-                    break;
-                case "-":
-                    offsetx=20;
-                    break;
-                case "=":
-                    offsetx=17;
-                    break;
-                case "↑":
-                case "↓":
-                    offsetx=18;
-                    break;
-                default:
-                    offsetx=10;
-                    break
+            for(let j=0;j<allMeteors[i].symbol.length;j++){
+                //Makes the drawing of each symbol centered in each meteor
+                switch(allMeteors[i].symbol[j]){
+                    case "G":
+                    case "U":
+                    case "C":
+                    case "Q":
+                        offsetx=14;
+                        break;
+                    case "M":
+                        offsetx=13;
+                        break;
+                    case "W":
+                        offsetx=12;
+                        break;
+                    case "L":
+                        offsetx=16;
+                        break;
+                    case "A":
+                    case "B":
+                    case "D":
+                    case "E":
+                    case "F":
+                    case "H":
+                    case "J":
+                    case "K":
+                    case "N":
+                    case "O":
+                    case "P":
+                    case "R":
+                    case "S":
+                    case "T":
+                    case "V":
+                    case "X":
+                    case "Y":
+                    case "Z":
+                        offsetx=15;
+                        break;
+                    case "I":
+                        offsetx=21;
+                        break;
+                    case "1":
+                    case "2":
+                    case "3":
+                    case "4":
+                    case "5":
+                    case "6":
+                    case "7":
+                    case "8":
+                    case "9":
+                    case "0":
+                        offsetx=17;
+                        break;
+                    case "[":
+                    case "]":
+                    case ";":
+                    case "\\":
+                    case "/":
+                    case ".":
+                    case ",":
+                        offsetx=22;
+                        break;
+                    case "'":
+                    case "-":
+                        offsetx=20;
+                        break;
+                    case "=":
+                        offsetx=17;
+                        break;
+                    case "↑":
+                    case "↓":
+                        offsetx=18;
+                        break;
+                    default:
+                        offsetx=10;
+                        break
+                }
+                dp.fillText(allMeteors[i].symbol[j],allMeteors[i].x+offsetx+(j*allMeteors[i].width),allMeteors[i].y+35);
             }
-            dp.fillText(allMeteors[i].symbol,allMeteors[i].x+offsetx,allMeteors[i].y+35);
         }
     }
 }
@@ -367,7 +368,7 @@ document.addEventListener("keyup",function(key){
                     keyInput=";";
                     break;
                 case "Quote":
-                    keyInput="''";
+                    keyInput="'";
                     break;
                 case "Equal":
                     keyInput="=";
@@ -678,11 +679,27 @@ var bonus=0;
 function game(){
     //There are a total of 50 possible symbols
     let randomSymbol=0;
+    //Used to see if can terminate the non-priority blocks
+    let shouldTerminate=true;
+    for(let i=0;i<allMeteors.length;i++){
+        if(allMeteors[i].level>=10&&allMeteors[i].level<=14&&!allMeteors[i].dead){
+            shouldTerminate=false;
+        }
+        if(allMeteors[i].level==15){
+            allMeteors[i].speed=8;
+        }
+    }
     //Rest blocksymbol
     blockSymbol="";
+    //Used to avoid repeating symbols
+    let repeatSymbol=[];
     //Symbol number depends on level number
     for(let i=0;i<blockLevel;i++){
         randomSymbol=Math.floor(Math.random()*50);
+        while(!repeatSymbol.includes(randomSymbol)){
+            randomSymbol=Math.floor(Math.random()*50);
+            repeatSymbol.push(randomSymbol);
+        }
         //Randomize the symbols for the meteors
         switch(randomSymbol){
             case 10:
@@ -727,7 +744,7 @@ function game(){
                 blockSymbol+=";";
                 break;
             case 40:
-                blockSymbol+="''";
+                blockSymbol+="'";
                 break;
             case 41:
                 blockSymbol+="[";
@@ -762,6 +779,22 @@ function game(){
         }
     }
     for(let i=0;i<allMeteors.length;i++){
+        //Colors each meteor based on level
+        if(allMeteors[i].level<=9){
+            allMeteors[i].color="black";
+        } else if(allMeteors[i].level<=14){
+            allMeteors[i].color="orange";
+        } else if(allMeteors[i].level==15){
+            allMeteors[i].color="gold";
+        } else if(allMeteors[i].level==16){
+            allMeteors[i].color="black";
+        } else if(allMeteors[i].level<=21){
+            allMeteors[i].color="green";
+        } else if(allMeteors[i].level<=21){
+            allMeteors[i].color="black";
+        } else{
+            allMeteors[i].color="purple";
+        }
         //Only when its not touching floor would it fall
         if(allMeteors[i].y+allMeteors[i].height<floor.y){
             allMeteors[i].fall();
@@ -793,12 +826,17 @@ function game(){
         if(!allMeteors[i].dead){
             if(keyInput!=""&&allMeteors[i].symbol.includes(keyInput)){
                 wrongInput=false;
+                
+                //document.getElementById("hi").innerHTML=allMeteors[i].symbol[0];
                 if(!allMeteors[i].inputCheck.includes(keyInput)&&allMeteors[i].level<=5){
                     allMeteors[i].inputCheck.push(keyInput);
                     allMeteors[i].levelResolved();
                 }
                 if(!allMeteors[i].inputCheck.includes(keyInput)&&(allMeteors[i].level>5&&allMeteors[i].level<=9)){
-                    
+                    if(keyInput==allMeteors[i].symbol[allMeteors[i].inputCheck.length]){
+                        allMeteors[i].inputCheck.push(keyInput);
+                         allMeteors[i].levelResolved();
+                    }
                 }
                 if(allMeteors[i].lives==0){
                     //Plays meteor terminated sound
@@ -1094,4 +1132,6 @@ Levels:
 17~21. Different numbers(1 to 5) of symbols that are not affected by any power ups/gadgets
 22~25. Different numbers(2 to 5) of symbols in which only the previous symbol is revealed while others are not shown until the previous is terminated
 26~30. Different numbers(1 to 5) of symbols where its termination produces two level 1~5 meteors
+31~35. Different numbers(1 to 5) of symbols where you have to hold shift(shift=true&&other key=true) and press key to terminate meteor
+36~40. Different numbers(1 to 5) of symbols where you have to hold alt(alt=true&&other key=true) and press key to terminate meteor
 */
