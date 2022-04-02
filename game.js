@@ -16,6 +16,8 @@ class Meteor{
         this.shouldDraw=true;
         //Use to store the previous inputs player made
         this.inputCheck=[];
+        //Number of clicks, only for level 16 meteors
+        this.clickNum=100;
     }
     fall(){
         this.y+=this.speed;
@@ -682,11 +684,17 @@ function game(){
     //Used to see if can terminate the non-priority blocks
     let shouldTerminate=true;
     for(let i=0;i<allMeteors.length;i++){
+        //Cancels termination if priority block is not terminated
         if(allMeteors[i].level>=10&&allMeteors[i].level<=14&&!allMeteors[i].dead){
             shouldTerminate=false;
         }
+        //Fast block speed adjustment
         if(allMeteors[i].level==15){
             allMeteors[i].speed=8;
+        }
+        //Slow block speed adjustment
+        if(allMeteors[i].level==16){
+            allMeteors[i].speed=0.1;
         }
     }
     //Rest blocksymbol
@@ -696,10 +704,10 @@ function game(){
     //Symbol number depends on level number
     for(let i=0;i<blockLevel;i++){
         randomSymbol=Math.floor(Math.random()*50);
-        while(!repeatSymbol.includes(randomSymbol)){
+        while(repeatSymbol.includes(randomSymbol)){
             randomSymbol=Math.floor(Math.random()*50);
-            repeatSymbol.push(randomSymbol);
         }
+        repeatSymbol.push(randomSymbol);
         //Randomize the symbols for the meteors
         switch(randomSymbol){
             case 10:
@@ -824,9 +832,8 @@ function game(){
             }
         }
         if(!allMeteors[i].dead){
-            if(keyInput!=""&&allMeteors[i].symbol.includes(keyInput)){
+            if(keyInput!=""&&allMeteors[i].symbol.includes(keyInput)&&shouldTerminate){
                 wrongInput=false;
-                
                 //document.getElementById("hi").innerHTML=allMeteors[i].symbol[0];
                 if(!allMeteors[i].inputCheck.includes(keyInput)&&allMeteors[i].level<=5){
                     allMeteors[i].inputCheck.push(keyInput);
