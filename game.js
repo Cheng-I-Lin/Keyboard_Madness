@@ -117,8 +117,8 @@ function drawGame(){
         }
         if(allMeteors[i].shouldDraw){
             let levelX=0;
-            //Only draws up to 5 levels
-            for(let j=0;j<Math.min(allMeteors[i].level,5);j++){
+            //Only draws according to the number of symbols
+            for(let j=0;j<allMeteors[i].symbol.length;j++){
                 dp.fillRect(allMeteors[i].x+levelX,allMeteors[i].y,allMeteors[i].width,allMeteors[i].height);
                 levelX+=allMeteors[i].width;
             }
@@ -423,7 +423,7 @@ document.addEventListener("keyup",function(key){
                 case 1:
                     removeMeteor();
                     for(let i=0;i<allMeteors.length;i++){
-                        if(!allMeteors[i].dead){
+                        if(!allMeteors[i].dead&&!(allMeteors[i].level>=17&&allMeteors[i].level<=21)){
                             allMeteors[i].resolved();
                             //Add score
                             score++;
@@ -446,7 +446,9 @@ document.addEventListener("keyup",function(key){
                 case 2:
                     //Need to stop the production of meteors as well
                     for(let i=0;i<allMeteors.length;i++){
-                        allMeteors[i].speed=0;
+                        if(!(allMeteors[i].level>=17&&allMeteors[i].level<=21)){
+                            allMeteors[i].speed=0;
+                        }
                     }
                     itemUsed.innerHTML="Time Quiescence";
                     break;
@@ -498,7 +500,9 @@ document.addEventListener("keyup",function(key){
                     break;
                 case 12:
                     for(let i=0;i<allMeteors.length;i++){
-                        allMeteors[i].y-=200;
+                        if(!(allMeteors[i].level>=17&&allMeteors[i].level<=21)){
+                            allMeteors[i].y-=200;
+                        }
                     }
                     itemUsed.innerHTML="Time Rewind";
                     break;
@@ -526,7 +530,9 @@ document.addEventListener("keyup",function(key){
                     break;
                 case 19:
                     for(let i=0;i<allMeteors.length;i++){
-                        allMeteors[i].speed=0.25;
+                        if(!(allMeteors[i].level>=17&&allMeteors[i].level<=21)){
+                            allMeteors[i].speed=0.25;
+                        }
                     }
                     itemUsed.innerHTML="Infinity Barrier";
                     break;
@@ -701,8 +707,31 @@ function game(){
     blockSymbol="";
     //Used to avoid repeating symbols
     let repeatSymbol=[];
+    //See how many symbol each meteor symbol should have
+    let symbolNum=0;
+    if(blockLevel==15||blockLevel==16){
+        symbolNum=1;
+    } else{
+        if(blockLevel/5==1){
+            symbolNum=5;
+        } else if(blockLevel/5==4){
+            symbolNum=4;
+        } else if(blockLevel/5==5){
+            symbolNum=5;
+        } else if(blockLevel/5==6){
+            symbolNum=5;
+        } else if(blockLevel/5==7){
+            symbolNum=5;
+        } else if(blockLevel/5==8){
+            symbolNum=5;
+        } else if(blockLevel<5){
+            symbolNum=blockLevel%5;
+        } else{
+            symbolNum=blockLevel%5;
+        }
+    }
     //Symbol number depends on level number
-    for(let i=0;i<blockLevel;i++){
+    for(let i=0;i<symbolNum;i++){
         randomSymbol=Math.floor(Math.random()*50);
         while(repeatSymbol.includes(randomSymbol)){
             randomSymbol=Math.floor(Math.random()*50);
@@ -843,6 +872,12 @@ function game(){
                     if(keyInput==allMeteors[i].symbol[allMeteors[i].inputCheck.length]){
                         allMeteors[i].inputCheck.push(keyInput);
                          allMeteors[i].levelResolved();
+                    }
+                }
+                if(allMeteors[i].level==16){
+                    allMeteors[i].clickNum--;
+                    if(allMeteors[i].clickNum==0){
+                        allMeteors[i].resolved();
                     }
                 }
                 if(allMeteors[i].lives==0){
@@ -1141,4 +1176,7 @@ Levels:
 26~30. Different numbers(1 to 5) of symbols where its termination produces two level 1~5 meteors
 31~35. Different numbers(1 to 5) of symbols where you have to hold shift(shift=true&&other key=true) and press key to terminate meteor
 36~40. Different numbers(1 to 5) of symbols where you have to hold alt(alt=true&&other key=true) and press key to terminate meteor
+
+See how to fix priority bug where if there's multiple priority any click would end the game
+Surprise meteor where items drop out when defeated?
 */
