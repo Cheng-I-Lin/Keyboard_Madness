@@ -1,6 +1,6 @@
-//Use this.attribute for the attributes
+//Use this.attribute for the attributes(use currentlevel for final game but block level for testing)
 class Meteor{
-    constructor(x,y,symbol=blockSymbol,speed=blockSpeed,level=blockLevel,lives=blockLives,color="black",width=blockWidth,height=blockHeight,dead=false) {
+    constructor(x,y,symbol=blockSymbol,speed=blockSpeed,level=currentLevel,lives=blockLives,color="black",width=blockWidth,height=blockHeight,dead=false) {
         this.x=x;
         this.y=y;
         this.color=color;
@@ -38,7 +38,7 @@ var blockHeight=50;
 var blockSymbol="";
 var blockLevel=1;
 var blockLives=1;
-var meteorTime=500;
+var meteorTime=1000;
 var score=0;
 
 //Intro transitions 2000
@@ -684,10 +684,10 @@ function callInventory(id){
 
 //Used to see if should give bonus or not
 var bonus=0;
+//Used to see the current level of each meteor
+var currentLevel=1;
 //Makes the meteors fall and create new objects
 function game(){
-    //There are a total of 50 possible symbols
-    let randomSymbol=0;
     //Used to see if can terminate the non-priority blocks
     let shouldTerminate=true;
     for(let i=0;i<allMeteors.length;i++){
@@ -704,126 +704,12 @@ function game(){
             allMeteors[i].speed=0.1;
         }
     }
-    //Rest blocksymbol
-    blockSymbol="";
-    //Used to avoid repeating symbols
-    let repeatSymbol=[];
-    //See how many symbol each meteor symbol should have
-    let symbolNum=0;
-    //Randomize the level of each meteor
-    let currentLevel=Math.floor(Math.random()*blockLevel+1);
-    if(currentLevel==15||currentLevel==16){
-        symbolNum=1;
-    } else{
-        if(currentLevel/5==1){
-            symbolNum=5;
-        } else if(currentLevel/5==4){
-            symbolNum=4;
-        } else if(currentLevel/5==5){
-            symbolNum=5;
-        } else if(currentLevel/5==6){
-            symbolNum=5;
-        } else if(currentLevel/5==7){
-            symbolNum=5;
-        } else if(currentLevel/5==8){
-            symbolNum=5;
-        } else if(currentLevel<5){
-            symbolNum=currentLevel%5;
-        } else{
-            symbolNum=currentLevel%5;
-        }
-    }
-    //Changes the lives of all meteors based on level/symbol num
-    blockLives=symbolNum;
-    //Symbol number depends on level number
-    for(let i=0;i<symbolNum;i++){
-        randomSymbol=Math.floor(Math.random()*50);
-        while(repeatSymbol.includes(randomSymbol)){
-            randomSymbol=Math.floor(Math.random()*50);
-        }
-        repeatSymbol.push(randomSymbol);
-        //Randomize the symbols for the meteors
-        switch(randomSymbol){
-            case 10:
-            case 11:
-            case 12:
-            case 13:
-            case 14:
-            case 15:
-            case 16:
-            case 17:
-            case 18:
-            case 19:
-            case 20:
-            case 21:
-            case 22:
-            case 23:
-            case 24:
-            case 25:
-            case 26:
-            case 27:
-            case 28:
-            case 29:
-            case 30:
-            case 31:
-            case 32:
-            case 33:
-            case 34:
-            case 35:
-                //Changing number to letter
-                blockSymbol+=String.fromCharCode(randomSymbol+55);
-                break;
-            case 36:
-                blockSymbol+=",";
-                break;
-            case 37:
-                blockSymbol+=".";
-                break;
-            case 38:
-                blockSymbol="/";
-                break;
-            case 39:
-                blockSymbol+=";";
-                break;
-            case 40:
-                blockSymbol+="'";
-                break;
-            case 41:
-                blockSymbol+="[";
-                break;
-            case 42:
-                blockSymbol+="]";
-                break;
-            case 43:
-                blockSymbol+="\\";
-                break;
-            case 44:
-                blockSymbol+="-";
-                break;
-            case 45:
-                blockSymbol+="=";
-                break;
-            case 46:
-                blockSymbol+="↑";
-                break;
-            case 47:
-                blockSymbol+="←";
-                break;
-            case 48:
-                blockSymbol+="↓";
-                break;
-            case 49:
-                blockSymbol+="→";
-                break;
-            default:
-                blockSymbol+=randomSymbol.toString();
-                break;
-        }
-    }
     for(let i=0;i<allMeteors.length;i++){
         //Colors each meteor based on level
-        if(allMeteors[i].level<=9){
+        if(allMeteors[i].level<=5){
             allMeteors[i].color="black";
+        } else if(allMeteors[i].level>=6&&allMeteors[i].level<=9){
+            allMeteors[i].color="grey";
         } else if(allMeteors[i].level<=14){
             allMeteors[i].color="orange";
         } else if(allMeteors[i].level==15){
@@ -867,23 +753,29 @@ function game(){
             }
         }
         if(!allMeteors[i].dead){
-            if(keyInput!=""&&allMeteors[i].symbol.includes(keyInput)&&shouldTerminate){
+            if(keyInput!=""&&allMeteors[i].symbol.includes(keyInput)){
                 wrongInput=false;
-                //document.getElementById("hi").innerHTML=allMeteors[i].symbol[0];
-                if(!allMeteors[i].inputCheck.includes(keyInput)&&allMeteors[i].level<=5){
-                    allMeteors[i].inputCheck.push(keyInput);
-                    allMeteors[i].levelResolved();
-                }
-                if(!allMeteors[i].inputCheck.includes(keyInput)&&(allMeteors[i].level>5&&allMeteors[i].level<=9)){
-                    if(keyInput==allMeteors[i].symbol[allMeteors[i].inputCheck.length]){
+                if(shouldTerminate){
+                    if(!allMeteors[i].inputCheck.includes(keyInput)&&allMeteors[i].level<=5){
                         allMeteors[i].inputCheck.push(keyInput);
-                         allMeteors[i].levelResolved();
+                        allMeteors[i].levelResolved();
                     }
-                }
-                if(allMeteors[i].level==16){
-                    allMeteors[i].clickNum--;
-                    if(allMeteors[i].clickNum==0){
-                        allMeteors[i].resolved();
+                    if(!allMeteors[i].inputCheck.includes(keyInput)&&(allMeteors[i].level>5&&allMeteors[i].level<=9)){
+                        if(keyInput==allMeteors[i].symbol[allMeteors[i].inputCheck.length]){
+                            allMeteors[i].inputCheck.push(keyInput);
+                             allMeteors[i].levelResolved();
+                        }
+                    }
+                    if(allMeteors[i].level==16){
+                        allMeteors[i].clickNum--;
+                        if(allMeteors[i].clickNum==0){
+                            allMeteors[i].resolved();
+                        }
+                    }
+                } else{
+                    if(allMeteors[i].level>=10&&allMeteors[i].level<=14&&(!allMeteors[i].inputCheck.includes(keyInput))){
+                        allMeteors[i].inputCheck.push(keyInput);
+                        allMeteors[i].levelResolved();
                     }
                 }
                 if(allMeteors[i].lives==0){
@@ -1078,6 +970,124 @@ setInterval(function(){
         }
         num++;
         if(num>=meteorTime/4){
+            //There are a total of 50 possible symbols
+            let randomSymbol=0;
+            //Reset blocksymbol
+            blockSymbol="";
+            //Used to avoid repeating symbols
+            let repeatSymbol=[];
+            //See how many symbol each meteor symbol should have
+            let symbolNum=0;
+            //Randomize the level of each meteor
+            currentLevel=Math.floor(Math.random()*blockLevel)+1;
+            if(currentLevel==15||currentLevel==16){
+                symbolNum=1;
+            } else{
+                if(currentLevel/5==1){
+                    symbolNum=5;
+                } else if(currentLevel/5==4){
+                    symbolNum=4;
+                } else if(currentLevel/5==5){
+                    symbolNum=5;
+                } else if(currentLevel/5==6){
+                    symbolNum=5;
+                } else if(currentLevel/5==7){
+                    symbolNum=5;
+                } else if(currentLevel/5==8){
+                    symbolNum=5;
+                } else if(currentLevel<5){
+                    symbolNum=currentLevel%5;
+                } else{
+                    symbolNum=currentLevel%5;
+                }
+            }
+            //Changes the lives of all meteors based on level/symbol num
+            blockLives=symbolNum;
+            //Symbol number depends on level number
+            for(let i=0;i<symbolNum;i++){
+                randomSymbol=Math.floor(Math.random()*50);
+                while(repeatSymbol.includes(randomSymbol)){
+                    randomSymbol=Math.floor(Math.random()*50);
+                }
+                repeatSymbol.push(randomSymbol);
+                //Randomize the symbols for the meteors
+                switch(randomSymbol){
+                    case 10:
+                    case 11:
+                    case 12:
+                    case 13:
+                    case 14:
+                    case 15:
+                    case 16:
+                    case 17:
+                    case 18:
+                    case 19:
+                    case 20:
+                    case 21:
+                    case 22:
+                    case 23:
+                    case 24:
+                    case 25:
+                    case 26:
+                    case 27:
+                    case 28:
+                    case 29:
+                    case 30:
+                    case 31:
+                    case 32:
+                    case 33:
+                    case 34:
+                    case 35:
+                        //Changing number to letter
+                        blockSymbol+=String.fromCharCode(randomSymbol+55);
+                        break;
+                    case 36:
+                        blockSymbol+=",";
+                        break;
+                    case 37:
+                        blockSymbol+=".";
+                        break;
+                    case 38:
+                        blockSymbol="/";
+                        break;
+                    case 39:
+                        blockSymbol+=";";
+                        break;
+                    case 40:
+                        blockSymbol+="'";
+                        break;
+                    case 41:
+                        blockSymbol+="[";
+                        break;
+                    case 42:
+                        blockSymbol+="]";
+                        break;
+                    case 43:
+                        blockSymbol+="\\";
+                        break;
+                    case 44:
+                        blockSymbol+="-";
+                        break;
+                    case 45:
+                        blockSymbol+="=";
+                        break;
+                    case 46:
+                        blockSymbol+="↑";
+                        break;
+                    case 47:
+                        blockSymbol+="←";
+                        break;
+                    case 48:
+                        blockSymbol+="↓";
+                        break;
+                    case 49:
+                        blockSymbol+="→";
+                        break;
+                    default:
+                        blockSymbol+=randomSymbol.toString();
+                        break;
+                }
+            }
             allMeteors.push(new Meteor(Math.random()*(window.innerWidth-blockWidth*blockLevel),-blockHeight));
             num=0;
         }
