@@ -36,8 +36,8 @@ var blockSpeed=0.5;
 var blockWidth=50;
 var blockHeight=50;
 var blockSymbol="";
-var blockLevel=2;
-var blockLives=2;
+var blockLevel=1;
+var blockLives=1;
 var meteorTime=500;
 var score=0;
 
@@ -429,6 +429,7 @@ document.addEventListener("keyup",function(key){
                             score++;
                             bonus++;
                             levelTime++;
+                            addLevel();
                             if(bonus==100){
                                 //Provide a random item to the inventory for every 100 points
                                 if(inventory.length<10){
@@ -709,27 +710,31 @@ function game(){
     let repeatSymbol=[];
     //See how many symbol each meteor symbol should have
     let symbolNum=0;
-    if(blockLevel==15||blockLevel==16){
+    //Randomize the level of each meteor
+    let currentLevel=Math.floor(Math.random()*blockLevel+1);
+    if(currentLevel==15||currentLevel==16){
         symbolNum=1;
     } else{
-        if(blockLevel/5==1){
+        if(currentLevel/5==1){
             symbolNum=5;
-        } else if(blockLevel/5==4){
+        } else if(currentLevel/5==4){
             symbolNum=4;
-        } else if(blockLevel/5==5){
+        } else if(currentLevel/5==5){
             symbolNum=5;
-        } else if(blockLevel/5==6){
+        } else if(currentLevel/5==6){
             symbolNum=5;
-        } else if(blockLevel/5==7){
+        } else if(currentLevel/5==7){
             symbolNum=5;
-        } else if(blockLevel/5==8){
+        } else if(currentLevel/5==8){
             symbolNum=5;
-        } else if(blockLevel<5){
-            symbolNum=blockLevel%5;
+        } else if(currentLevel<5){
+            symbolNum=currentLevel%5;
         } else{
-            symbolNum=blockLevel%5;
+            symbolNum=currentLevel%5;
         }
     }
+    //Changes the lives of all meteors based on level/symbol num
+    blockLives=symbolNum;
     //Symbol number depends on level number
     for(let i=0;i<symbolNum;i++){
         randomSymbol=Math.floor(Math.random()*50);
@@ -847,6 +852,7 @@ function game(){
                     score++;
                     bonus++;
                     levelTime++;
+                    addLevel();
                     if(bonus==100){
                         //Provide a random item to the inventory for every 100 points
                         if(inventory.length<10){
@@ -890,6 +896,7 @@ function game(){
                     score++;
                     bonus++;
                     levelTime++;
+                    addLevel();
                     if(bonus==100){
                         //Provide a random item to the inventory for every 100 points
                         if(inventory.length<10){
@@ -907,6 +914,54 @@ function game(){
     if(wrongInput&&keyInput!="Space"){
         dead=true;
         playGameOver();
+    }
+}
+
+//Adds new level based on score
+function addLevel(){
+    switch(score){
+        case 5:
+        case 10:
+        case 25:
+        case 50:
+        case 100:
+        case 125:
+        case 150:
+        case 175:
+        case 250:
+        case 275:
+        case 300:
+        case 325:
+        case 350:
+        case 400:
+        case 500:
+        case 525:
+        case 550:
+        case 575:
+        case 600:
+        case 625:
+        case 800:
+        case 850:
+        case 900:
+        case 950:
+        case 1200:
+        case 1300:
+        case 1400:
+        case 1500:
+        case 2000:
+        case 2250:
+        case 2500:
+        case 2750:
+        case 3000:
+        case 5000:
+        case 5500:
+        case 6000:
+        case 6500:
+        case 7000:
+            blockLevel++;
+            break;
+        default:
+            break;
     }
 }
 
