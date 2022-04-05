@@ -1,6 +1,6 @@
 //Use this.attribute for the attributes(use currentlevel for final game but block level for testing)
 class Meteor{
-    constructor(x,y,symbol=blockSymbol,speed=blockSpeed,level=currentLevel,lives=blockLives,color="black",width=blockWidth,height=blockHeight,dead=false) {
+    constructor(x,y,symbol=blockSymbol,speed=blockSpeed,level=blockLevel,lives=blockLives,color="black",width=blockWidth,height=blockHeight,dead=false) {
         this.x=x;
         this.y=y;
         this.color=color;
@@ -36,7 +36,7 @@ var blockSpeed=0.5;
 var blockWidth=50;
 var blockHeight=50;
 var blockSymbol="";
-var blockLevel=1;
+var blockLevel=22;
 var blockLives=1;
 var meteorTime=1000;
 var score=0;
@@ -125,7 +125,7 @@ function drawGame(){
             dp.fillStyle="white";
             dp.font="30px Arial";
             let offsetx=0;
-            for(let j=0;j<allMeteors[i].symbol.length;j++){
+            for(let j=0;j<allMeteors[i].symbol.length;){
                 //Makes the drawing of each symbol centered in each meteor
                 switch(allMeteors[i].symbol[j]){
                     case "G":
@@ -202,7 +202,18 @@ function drawGame(){
                         offsetx=10;
                         break
                 }
-                dp.fillText(allMeteors[i].symbol[j],allMeteors[i].x+offsetx+(j*allMeteors[i].width),allMeteors[i].y+35);
+                if(allMeteors[i].level>=22&&allMeteors[i].level<=25){
+                    dp.fillText(allMeteors[i].symbol[j],allMeteors[i].x+offsetx+(j*allMeteors[i].width),allMeteors[i].y+35);
+                    if(j!=allMeteors[i].inputCheck.length){
+                        j++;
+                    } else{
+                        //Make it six to break out of the for loop
+                        j=6;
+                    }
+                } else{
+                    dp.fillText(allMeteors[i].symbol[j],allMeteors[i].x+offsetx+(j*allMeteors[i].width),allMeteors[i].y+35);
+                    j++;
+                }
             }
         }
     }
@@ -697,7 +708,7 @@ function game(){
         }
         //Fast block speed adjustment
         if(allMeteors[i].level==15){
-            allMeteors[i].speed=8;
+            allMeteors[i].speed=6;
         }
         //Slow block speed adjustment
         if(allMeteors[i].level==16){
@@ -713,7 +724,7 @@ function game(){
         } else if(allMeteors[i].level<=14){
             allMeteors[i].color="orange";
         } else if(allMeteors[i].level==15){
-            allMeteors[i].color="gold";
+            allMeteors[i].color="blue";
         } else if(allMeteors[i].level==16){
             allMeteors[i].color="black";
         } else if(allMeteors[i].level<=21){
@@ -756,11 +767,11 @@ function game(){
             if(keyInput!=""&&allMeteors[i].symbol.includes(keyInput)){
                 wrongInput=false;
                 if(shouldTerminate){
-                    if(!allMeteors[i].inputCheck.includes(keyInput)&&allMeteors[i].level<=5){
+                    if(!allMeteors[i].inputCheck.includes(keyInput)&&(allMeteors[i].level<=5||allMeteors[i].level==15)){
                         allMeteors[i].inputCheck.push(keyInput);
                         allMeteors[i].levelResolved();
                     }
-                    if(!allMeteors[i].inputCheck.includes(keyInput)&&(allMeteors[i].level>5&&allMeteors[i].level<=9)){
+                    if(!allMeteors[i].inputCheck.includes(keyInput)&&((allMeteors[i].level>5&&allMeteors[i].level<=9)||(allMeteors[i].level>=22&&allMeteors[i].level<=25))){
                         if(keyInput==allMeteors[i].symbol[allMeteors[i].inputCheck.length]){
                             allMeteors[i].inputCheck.push(keyInput);
                              allMeteors[i].levelResolved();
