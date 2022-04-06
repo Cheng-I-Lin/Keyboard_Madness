@@ -36,9 +36,9 @@ var blockSpeed=0.5;
 var blockWidth=50;
 var blockHeight=50;
 var blockSymbol="";
-var blockLevel=27;
+var blockLevel=37;
 var blockLives=1;
-var meteorTime=5000;
+var meteorTime=1000;
 var score=0;
 
 //Intro transitions 2000
@@ -82,6 +82,8 @@ var arrowOnly=false;
 var juggernaut=false;
 //Used for meteor level > 30
 var holdShift=false;
+//Used for meter level > 35
+var holdShiftRight=false;
 
 function drawBackground(){
     let canvas=document.getElementById("background");
@@ -359,6 +361,9 @@ document.addEventListener("keydown",function(key){
     if(key.code=="ShiftLeft"){
         holdShift=true;
     }
+    if(key.code=="ShiftRight"){
+        holdShiftRight=true;
+    }
 });
 document.addEventListener("keyup",function(key){
     if(!pause&&!dead){
@@ -425,11 +430,12 @@ document.addEventListener("keyup",function(key){
         wrongInput=true;
         //Player won't die if press space or shift
         if(key.code=="Space"){
-            keyInput="Space";
             wrongInput=false;
         } else if(key.code=="ShiftLeft"){
-            keyInput="ShiftLeft";
             holdShift=false;
+            wrongInput=false;
+        } else if(key.code=="ShiftRight"){
+            holdShiftRight=true;
             wrongInput=false;
         }
         //Activates the item power selected
@@ -796,6 +802,14 @@ function game(){
                             allMeteors[i].resolved();
                         }
                     }
+                    if(holdShift&&!allMeteors[i].inputCheck.includes(keyInput)&&(allMeteors[i].level>30&&allMeteors[i].level<=35)){
+                        allMeteors[i].inputCheck.push(keyInput);
+                        allMeteors[i].levelResolved();
+                    }
+                    if(holdShiftRight&&!allMeteors[i].inputCheck.includes(keyInput)&&(allMeteors[i].level>35&&allMeteors[i].level<=40)){
+                        allMeteors[i].inputCheck.push(keyInput);
+                        allMeteors[i].levelResolved();
+                    }
                 } else{
                     if(allMeteors[i].level>=10&&allMeteors[i].level<=14&&(!allMeteors[i].inputCheck.includes(keyInput))){
                         allMeteors[i].inputCheck.push(keyInput);
@@ -820,6 +834,7 @@ function game(){
                         }
                         bonus=0;
                     }
+                    //Create two new meteors for levels 26~30
                     if(allMeteors[i].level>=26&&allMeteors[i].level<=30){
                         //Use for loop to create two meteors
                         for(let j=0;j<2;j++){
@@ -914,7 +929,7 @@ function game(){
                                         break;
                                 }
                             }
-                            allMeteors.push(new Meteor(Math.random()*(window.innerWidth-blockWidth*blockLevel)+(j*blockWidth*blockLevel)+blockWidth,-blockHeight));
+                            allMeteors.push(new Meteor(Math.random()*(window.innerWidth-blockWidth*currentLevel),allMeteors[i].y));
                         }
                     }
                 }
@@ -1209,7 +1224,7 @@ setInterval(function(){
                         break;
                 }
             }
-            allMeteors.push(new Meteor(Math.random()*(window.innerWidth-blockWidth*blockLevel),-blockHeight));
+            allMeteors.push(new Meteor(Math.random()*(window.innerWidth-currentLevel*blockLevel),-blockHeight));
             num=0;
         }
     }
@@ -1361,8 +1376,7 @@ Levels:
 22~25. Different numbers(2 to 5) of symbols in which only the previous symbol is revealed while others are not shown until the previous is terminated
 26~30. Different numbers(1 to 5) of symbols where its termination produces two level 1~5 meteors
 31~35. Different numbers(1 to 5) of symbols where you have to hold shift(shift=true&&other key=true) and press key to terminate meteor
-36~40. Different numbers(1 to 5) of symbols where you have to hold alt(alt=true&&other key=true) and press key to terminate meteor
+36~40. Different numbers(1 to 5) of symbols where you have to hold shiftright(shiftright=true&&other key=true) and press key to terminate meteor
 
-See how to fix priority bug where if there's multiple priority any click would end the game
 Surprise meteor where items drop out when defeated?
 */
