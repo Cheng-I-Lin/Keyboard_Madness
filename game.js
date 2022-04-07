@@ -36,7 +36,7 @@ var blockSpeed=0.5;
 var blockWidth=50;
 var blockHeight=50;
 var blockSymbol="";
-var blockLevel=37;
+var blockLevel=1;
 var blockLives=1;
 var meteorTime=1000;
 var score=0;
@@ -79,11 +79,22 @@ var letterOnly=false;
 var numOnly=false;
 var symbolOnly=false;
 var arrowOnly=false;
-var juggernaut=false;
+var juggernaut={
+    on:false,
+    x:0,
+    y:0,
+    speed:2
+};
 //Used for meteor level > 30
 var holdShift=false;
 //Used for meter level > 35
 var holdShiftRight=false;
+var randomLuck=0;
+var hotStreak=false;
+var restrict={
+    on:false,
+    x:0
+};
 
 function drawBackground(){
     let canvas=document.getElementById("background");
@@ -111,6 +122,20 @@ function drawGame(){
     canvas.width = grid.offsetWidth;
     canvas.height = grid.offsetHeight;
     dp.clearRect(canvas.left,canvas.top,canvas.width,canvas.height);
+    if(juggernaut.on){
+        dp.fillStyle="red";
+        dp.fillRect(juggernaut.x,juggernaut.y,50,50);
+        //Turns the juggernaut block when hit the sides of the screen
+        if(juggernaut.x+50>=grid.offsetWidth||juggernaut.x<=0){
+            juggernaut.speed*=-1;
+        }
+        //Moves the juggernaut block
+        juggernaut.x+=juggernaut.speed;
+    }
+    if(restrict.on){
+        dp.fillStyle="skyblue";
+        dp.fillRect(restrict.x,0,100,grid.offsetHeight-floor.height);
+    }
     //Draws all meteors as long as game not over
     for(let i=0;i<allMeteors.length;i++){
         //Draws meteor only if it's not dead
@@ -189,9 +214,9 @@ function drawGame(){
                     case "/":
                     case ".":
                     case ",":
+                    case "'":
                         offsetx=22;
                         break;
-                    case "'":
                     case "-":
                         offsetx=20;
                         break;
@@ -279,7 +304,10 @@ function restartGame(){
     numOnly=false;
     symbolOnly=false;
     arrowOnly=false;
-    juggernaut=false;
+    juggernaut.on=false;
+    randomLuck=0;
+    hotStreak=false;
+    restrict.on=false;
 }
 const showInventory=document.getElementById("showInventory");
 const inventoryPage=document.getElementById("inventory");
@@ -489,13 +517,29 @@ document.addEventListener("keyup",function(key){
                     itemUsed.innerHTML="Immunity";
                     break;
                 case 5:
+                    let luck=Math.floor(Math.random()*100);
+                    //20% chance
+                    if(luck<19&&randomLuck!=50){
+                        randomLuck+=2;
+                    }
                     itemUsed.innerHTML="Luky Charm";
                     break;
                 case 6:
+                    //Does not affect the points added by other gadgets(eg. immunity and magical eraser)
+                    hotStreak=true;
+                    setTimeout(function(){
+                        hotStreak=false;
+                    },10000);
                     itemUsed.innerHTML="Hot Streak";
                     break;
                 case 7:
-                    juggernaut=true;
+                    //Randomize juggernaut position
+                    juggernaut.x=Math.floor(Math.random()*(grid.offsetWidth-50));
+                    juggernaut.y=Math.floor(Math.random()*(grid.offsetHeight-floor.height-50));
+                    juggernaut.on=true;
+                    setTimeout(function(){
+                        juggernaut.on=false;
+                    },20000);
                     itemUsed.innerHTML="Juggernaut";
                     break;
                 case 8:
@@ -517,7 +561,7 @@ document.addEventListener("keyup",function(key){
                         floor.height+=25;
                         inventory.push(Math.floor(Math.random()*20));
                     }
-                    itemUsed.innerHTML="Positive Trade";
+                    itemUsed.innerHTML="Equal Trade";
                     break;
                 case 11:
                     for(let i=0;i<inventory.length;i++){
@@ -534,25 +578,63 @@ document.addEventListener("keyup",function(key){
                     itemUsed.innerHTML="Time Rewind";
                     break;
                 case 13:
+                    for(let i=0;i<allMeteors.length;i++){
+                        if(!(allMeteors[i].level>=17&&allMeteors[i].level<=21)){
+                            allMeteors[i].level=1;
+                            allMeteors[i].lives=1;
+                            //Leaves only the first letter of each meteor symbol
+                            allMeteors[i].symbol=allMeteors[i].symbol.substring(0,1);
+                            allMeteors[i].inputCheck=[];
+                        }
+                    }
                     itemUsed.innerHTML="Primitive Meteors";
                     break;
                 case 14:
                     numOnly=true;
+                    arrowOnly=false;
+                    letterOnly=false;
+                    symbolOnly=false;
+                    setTimeout(function(){
+                        numOnly=false;
+                    },10000);
                     itemUsed.innerHTML="Digits Only";
                     break;
                 case 15:
                     letterOnly=true;
+                    numOnly=false;
+                    arrowOnly=false;
+                    symbolOnly=false;
+                    setTimeout(function(){
+                        letterOnly=false;
+                    },10000);
                     itemUsed.innerHTML="Letters Only";
                     break;
                 case 16:
                     symbolOnly=true;
+                    numOnly=false;
+                    letterOnly=false;
+                    arrowOnly=false;
+                    setTimeout(function(){
+                        symbolOnly=false;
+                    },10000);
                     itemUsed.innerHTML="Symbols Only";
                     break;
                 case 17:
                     arrowOnly=true;
+                    numOnly=false;
+                    letterOnly=false;
+                    symbolOnly=false;
+                    setTimeout(function(){
+                        arrowOnly=false;
+                    },10000);
                     itemUsed.innerHTML="Arrows Only";
                     break;
                 case 18:
+                    restrict.x=Math.floor(Math.random()*(grid.offsetWidth-100));
+                    restrict.on=true;
+                    setTimeout(function(){
+                        restrict.on=false;
+                    },15000);
                     itemUsed.innerHTML="Restricted Area";
                     break;
                 case 19:
@@ -717,6 +799,63 @@ function game(){
     //Used to see if can terminate the non-priority blocks
     let shouldTerminate=true;
     for(let i=0;i<allMeteors.length;i++){
+        //Terminate meteor with luck
+        if(!allMeteors[i].dead&&Math.floor(Math.random()*100)+1<=randomLuck&&!(allMeteors[i].level>=17&&allMeteors[i].level<=21)){
+            removeMeteor();
+            allMeteors[i].resolved();
+            setTimeout(function(){
+                allMeteors[i].shouldDraw=false;
+            },1000);
+            score++;
+            bonus++;
+            levelTime++;
+            addLevel();
+            if(bonus==100){
+                //Provide a random item to the inventory for every 100 points
+                if(inventory.length<10){
+                    inventory.push(Math.floor(Math.random()*20));
+                }
+                bonus=0;
+            }
+        }
+        //Terminate meteor if it touches the juggernaut block
+        if(!allMeteors[i].dead&&(allMeteors[i].x<=juggernaut.x+50&&allMeteors[i].x+allMeteors[i].symbol.length*blockWidth>=juggernaut.x)&&(allMeteors[i].y<=juggernaut.y+50&&allMeteors[i].y+blockHeight>=juggernaut.y)&&!(allMeteors[i].level>=17&&allMeteors[i].level<=21)&&juggernaut.on){
+            removeMeteor();
+            allMeteors[i].resolved();
+            setTimeout(function(){
+                allMeteors[i].shouldDraw=false;
+            },1000);
+            score++;
+            bonus++;
+            levelTime++;
+            addLevel();
+            if(bonus==100){
+                //Provide a random item to the inventory for every 100 points
+                if(inventory.length<10){
+                    inventory.push(Math.floor(Math.random()*20));
+                }
+                bonus=0;
+            }
+        }
+        //Terminate meteor if it touches the restricted area
+        if(!allMeteors[i].dead&&(allMeteors[i].x<=restrict.x+100&&allMeteors[i].x+allMeteors[i].symbol.length*blockWidth>=restrict.x)&&!(allMeteors[i].level>=17&&allMeteors[i].level<=21)&&restrict.on){
+            removeMeteor();
+            allMeteors[i].resolved();
+            setTimeout(function(){
+                allMeteors[i].shouldDraw=false;
+            },1000);
+            score++;
+            bonus++;
+            levelTime++;
+            addLevel();
+            if(bonus==100){
+                //Provide a random item to the inventory for every 100 points
+                if(inventory.length<10){
+                    inventory.push(Math.floor(Math.random()*20));
+                }
+                bonus=0;
+            }
+        }
         //Cancels termination if priority block is not terminated
         if(allMeteors[i].level>=10&&allMeteors[i].level<=14&&!allMeteors[i].dead){
             shouldTerminate=false;
@@ -760,6 +899,7 @@ function game(){
             //Only when meteor is not dead will it end the game when touch floor
             if(!allMeteors[i].dead){
                 if(immune){
+                    removeMeteor();
                     allMeteors[i].resolved();
                     setTimeout(function(){
                         allMeteors[i].shouldDraw=false;
@@ -783,153 +923,179 @@ function game(){
             }
         }
         if(!allMeteors[i].dead){
-            if(keyInput!=""&&allMeteors[i].symbol.includes(keyInput)){
-                wrongInput=false;
-                if(shouldTerminate){
-                    if(!allMeteors[i].inputCheck.includes(keyInput)&&(allMeteors[i].level<=5||allMeteors[i].level==15||(allMeteors[i].level>=26&&allMeteors[i].level<=30))){
-                        allMeteors[i].inputCheck.push(keyInput);
-                        allMeteors[i].levelResolved();
-                    }
-                    if(!allMeteors[i].inputCheck.includes(keyInput)&&((allMeteors[i].level>5&&allMeteors[i].level<=9)||(allMeteors[i].level>=22&&allMeteors[i].level<=25))){
-                        if(keyInput==allMeteors[i].symbol[allMeteors[i].inputCheck.length]){
+            if(keyInput!=""&&omnipitent){
+                allMeteors[i].levelResolved();
+            } else if(!omnipitent){
+                if(keyInput!=""&&allMeteors[i].symbol.includes(keyInput)){
+                    wrongInput=false;
+                    if(shouldTerminate){
+                        if(!allMeteors[i].inputCheck.includes(keyInput)&&(allMeteors[i].level<=5||allMeteors[i].level==15||(allMeteors[i].level>=26&&allMeteors[i].level<=30))){
                             allMeteors[i].inputCheck.push(keyInput);
-                             allMeteors[i].levelResolved();
+                            allMeteors[i].levelResolved();
                         }
-                    }
-                    if(allMeteors[i].level==16){
-                        allMeteors[i].clickNum--;
-                        if(allMeteors[i].clickNum==0){
-                            allMeteors[i].resolved();
-                        }
-                    }
-                    if(holdShift&&!allMeteors[i].inputCheck.includes(keyInput)&&(allMeteors[i].level>30&&allMeteors[i].level<=35)){
-                        allMeteors[i].inputCheck.push(keyInput);
-                        allMeteors[i].levelResolved();
-                    }
-                    if(holdShiftRight&&!allMeteors[i].inputCheck.includes(keyInput)&&(allMeteors[i].level>35&&allMeteors[i].level<=40)){
-                        allMeteors[i].inputCheck.push(keyInput);
-                        allMeteors[i].levelResolved();
-                    }
-                } else{
-                    if(allMeteors[i].level>=10&&allMeteors[i].level<=14&&(!allMeteors[i].inputCheck.includes(keyInput))){
-                        allMeteors[i].inputCheck.push(keyInput);
-                        allMeteors[i].levelResolved();
-                    }
-                }
-                if(allMeteors[i].lives==0){
-                    //Plays meteor terminated sound
-                    removeMeteor();
-                    allMeteors[i].resolved();
-                    setTimeout(function(){
-                        allMeteors[i].shouldDraw=false;
-                    },1000);
-                    score++;
-                    bonus++;
-                    levelTime++;
-                    addLevel();
-                    if(bonus==100){
-                        //Provide a random item to the inventory for every 100 points
-                        if(inventory.length<10){
-                            inventory.push(Math.floor(Math.random()*20));
-                        }
-                        bonus=0;
-                    }
-                    //Create two new meteors for levels 26~30
-                    if(allMeteors[i].level>=26&&allMeteors[i].level<=30){
-                        //Use for loop to create two meteors
-                        for(let j=0;j<2;j++){
-                            blockSymbol="";
-                            let randomSymbol=0;
-                            let repeatSymbol=[];
-                            currentLevel=Math.floor(Math.random()*5)+1;
-                            let symbolNum=currentLevel;
-                            blockLives=symbolNum;
-                            //Symbol number depends on level number
-                            for(let i=0;i<symbolNum;i++){
-                                randomSymbol=Math.floor(Math.random()*50);
-                                while(repeatSymbol.includes(randomSymbol)){
-                                    randomSymbol=Math.floor(Math.random()*50);
-                                }
-                                repeatSymbol.push(randomSymbol);
-                                //Randomize the symbols for the meteors
-                                switch(randomSymbol){
-                                    case 10:
-                                    case 11:
-                                    case 12:
-                                    case 13:
-                                    case 14:
-                                    case 15:
-                                    case 16:
-                                    case 17:
-                                    case 18:
-                                    case 19:
-                                    case 20:
-                                    case 21:
-                                    case 22:
-                                    case 23:
-                                    case 24:
-                                    case 25:
-                                    case 26:
-                                    case 27:
-                                    case 28:
-                                    case 29:
-                                    case 30:
-                                    case 31:
-                                    case 32:
-                                    case 33:
-                                    case 34:
-                                    case 35:
-                                        //Changing number to letter
-                                        blockSymbol+=String.fromCharCode(randomSymbol+55);
-                                        break;
-                                    case 36:
-                                        blockSymbol+=",";
-                                        break;
-                                    case 37:
-                                        blockSymbol+=".";
-                                        break;
-                                    case 38:
-                                        blockSymbol="/";
-                                        break;
-                                    case 39:
-                                        blockSymbol+=";";
-                                        break;
-                                    case 40:
-                                        blockSymbol+="'";
-                                        break;
-                                    case 41:
-                                        blockSymbol+="[";
-                                        break;
-                                    case 42:
-                                        blockSymbol+="]";
-                                        break;
-                                    case 43:
-                                        blockSymbol+="\\";
-                                        break;
-                                    case 44:
-                                        blockSymbol+="-";
-                                        break;
-                                    case 45:
-                                        blockSymbol+="=";
-                                        break;
-                                    case 46:
-                                        blockSymbol+="↑";
-                                        break;
-                                    case 47:
-                                        blockSymbol+="←";
-                                        break;
-                                    case 48:
-                                        blockSymbol+="↓";
-                                        break;
-                                    case 49:
-                                        blockSymbol+="→";
-                                        break;
-                                    default:
-                                        blockSymbol+=randomSymbol.toString();
-                                        break;
-                                }
+                        if(!allMeteors[i].inputCheck.includes(keyInput)&&((allMeteors[i].level>5&&allMeteors[i].level<=9)||(allMeteors[i].level>=22&&allMeteors[i].level<=25))){
+                            if(keyInput==allMeteors[i].symbol[allMeteors[i].inputCheck.length]){
+                                allMeteors[i].inputCheck.push(keyInput);
+                                 allMeteors[i].levelResolved();
                             }
-                            allMeteors.push(new Meteor(Math.random()*(window.innerWidth-blockWidth*currentLevel),allMeteors[i].y));
+                        }
+                        if(allMeteors[i].level==16){
+                            allMeteors[i].clickNum--;
+                            if(allMeteors[i].clickNum==0){
+                                allMeteors[i].resolved();
+                            }
+                        }
+                        if(holdShift&&!allMeteors[i].inputCheck.includes(keyInput)&&(allMeteors[i].level>30&&allMeteors[i].level<=35)){
+                            allMeteors[i].inputCheck.push(keyInput);
+                            allMeteors[i].levelResolved();
+                        }
+                        if(holdShiftRight&&!allMeteors[i].inputCheck.includes(keyInput)&&(allMeteors[i].level>35&&allMeteors[i].level<=40)){
+                            allMeteors[i].inputCheck.push(keyInput);
+                            allMeteors[i].levelResolved();
+                        }
+                    } else{
+                        if(allMeteors[i].level>=10&&allMeteors[i].level<=14&&(!allMeteors[i].inputCheck.includes(keyInput))){
+                            allMeteors[i].inputCheck.push(keyInput);
+                            allMeteors[i].levelResolved();
+                        }
+                    }
+                    if(allMeteors[i].lives==0){
+                        //Plays meteor terminated sound
+                        removeMeteor();
+                        allMeteors[i].resolved();
+                        setTimeout(function(){
+                            allMeteors[i].shouldDraw=false;
+                        },1000);
+                        if(hotStreak){
+                            score+=2;
+                        } else{
+                            score++;
+                        }
+                        bonus++;
+                        levelTime++;
+                        addLevel();
+                        if(bonus==100){
+                            //Provide a random item to the inventory for every 100 points
+                            if(inventory.length<10){
+                                inventory.push(Math.floor(Math.random()*20));
+                            }
+                            bonus=0;
+                        }
+                        //Create two new meteors for levels 26~30
+                        if(allMeteors[i].level>=26&&allMeteors[i].level<=30){
+                            //Use for loop to create two meteors
+                            for(let j=0;j<2;j++){
+                                blockSymbol="";
+                                let randomSymbol=0;
+                                let repeatSymbol=[];
+                                currentLevel=Math.floor(Math.random()*5)+1;
+                                let symbolNum=currentLevel;
+                                blockLives=symbolNum;
+                                let n=0;
+                                let addN=0;
+                                //Symbol number depends on level number
+                                for(let i=0;i<symbolNum;i++){
+                                    if(numOnly){
+                                        n=10;
+                                        addN=0;
+                                    } else if(letterOnly){
+                                        n=26;
+                                        addN=10;
+                                    } else if(symbolOnly){
+                                        n=10;
+                                        addN=36;
+                                    } else if(arrowOnly){
+                                        n=4;
+                                        addN=46;
+                                    } else{
+                                        n=50;
+                                        addN=0;
+                                    }
+                                    randomSymbol=Math.floor(Math.random()*n)+addN;
+                                    while(repeatSymbol.includes(randomSymbol)){
+                                        randomSymbol=Math.floor(Math.random()*n)+addN;
+                                    }
+                                    repeatSymbol.push(randomSymbol);
+                                    //Randomize the symbols for the meteors
+                                    switch(randomSymbol){
+                                        case 10:
+                                        case 11:
+                                        case 12:
+                                        case 13:
+                                        case 14:
+                                        case 15:
+                                        case 16:
+                                        case 17:
+                                        case 18:
+                                        case 19:
+                                        case 20:
+                                        case 21:
+                                        case 22:
+                                        case 23:
+                                        case 24:
+                                        case 25:
+                                        case 26:
+                                        case 27:
+                                        case 28:
+                                        case 29:
+                                        case 30:
+                                        case 31:
+                                        case 32:
+                                        case 33:
+                                        case 34:
+                                        case 35:
+                                            //Changing number to letter
+                                            blockSymbol+=String.fromCharCode(randomSymbol+55);
+                                            break;
+                                        case 36:
+                                            blockSymbol+=",";
+                                            break;
+                                        case 37:
+                                            blockSymbol+=".";
+                                            break;
+                                        case 38:
+                                            blockSymbol="/";
+                                            break;
+                                        case 39:
+                                            blockSymbol+=";";
+                                            break;
+                                        case 40:
+                                            blockSymbol+="'";
+                                            break;
+                                        case 41:
+                                            blockSymbol+="[";
+                                            break;
+                                        case 42:
+                                            blockSymbol+="]";
+                                            break;
+                                        case 43:
+                                            blockSymbol+="\\";
+                                            break;
+                                        case 44:
+                                            blockSymbol+="-";
+                                            break;
+                                        case 45:
+                                            blockSymbol+="=";
+                                            break;
+                                        case 46:
+                                            blockSymbol+="↑";
+                                            break;
+                                        case 47:
+                                            blockSymbol+="←";
+                                            break;
+                                        case 48:
+                                            blockSymbol+="↓";
+                                            break;
+                                        case 49:
+                                            blockSymbol+="→";
+                                            break;
+                                        default:
+                                            blockSymbol+=randomSymbol.toString();
+                                            break;
+                                    }
+                                }
+                                allMeteors.push(new Meteor(Math.random()*(window.innerWidth-blockWidth*currentLevel),allMeteors[i].y));
+                            }
                         }
                     }
                 }
@@ -1040,7 +1206,7 @@ function drawItem(){
                 itemImg[i].src="";
                 break;
             case 10:
-                item[i].innerHTML="Positive Trade";
+                item[i].innerHTML="Equal Trade";
                 itemImg[i].src="";
                 break;
             case 11:
@@ -1091,7 +1257,7 @@ function drawItem(){
         }
     }
 }
-inventory=[1,2,3,4,5,6,7,8,9,11];
+inventory=[1,2,3,4,18,14,15,16,7,11];
 var num=0;
 var levelTime=0;
 //Create meteor objects
@@ -1139,11 +1305,29 @@ setInterval(function(){
             }
             //Changes the lives of all meteors based on level/symbol num
             blockLives=symbolNum;
+            let n=0;
+            let addN=0;
             //Symbol number depends on level number
             for(let i=0;i<symbolNum;i++){
-                randomSymbol=Math.floor(Math.random()*50);
+                if(numOnly){
+                    n=10;
+                    addN=0;
+                } else if(letterOnly){
+                    n=26;
+                    addN=10;
+                } else if(symbolOnly){
+                    n=10;
+                    addN=36;
+                } else if(arrowOnly){
+                    n=4;
+                    addN=46;
+                } else{
+                    n=50;
+                    addN=0;
+                }
+                randomSymbol=Math.floor(Math.random()*n)+addN;
                 while(repeatSymbol.includes(randomSymbol)){
-                    randomSymbol=Math.floor(Math.random()*50);
+                    randomSymbol=Math.floor(Math.random()*n)+addN;
                 }
                 repeatSymbol.push(randomSymbol);
                 //Randomize the symbols for the meteors
@@ -1224,7 +1408,7 @@ setInterval(function(){
                         break;
                 }
             }
-            allMeteors.push(new Meteor(Math.random()*(window.innerWidth-currentLevel*blockLevel),-blockHeight));
+            allMeteors.push(new Meteor(Math.random()*(window.innerWidth-blockWidth*currentLevel),-blockHeight));
             num=0;
         }
     }
@@ -1281,7 +1465,7 @@ setInterval(function(){
                 currentItemImg.src="";
                 break;
             case 10:
-                currentItem.innerHTML="Positive Trade";
+                currentItem.innerHTML="Equal Trade";
                 currentItemImg.src="";
                 break;
             case 11:
@@ -1355,7 +1539,7 @@ Inventory Item Ideas:
 8. Juggernaut: create a smashing block that keeps moving slowly(or fast) from one end to another, touch meteors die
 9. Omnipitent: all keys work on everything
 10. Sacrificial Lamb(new name): throw away all inventory, each adding 5 points to the score
-11. Positive Trade: increase floor height but random gets one more item
+11. Equal Trade: increase floor height but random gets one more item
 12. Shuffle: shuffles and changes all items in the inventory to new ones
 13. Rewind: pushes all meteor upwards
 14. Primitives: decrease all meteor to having only one symbol
