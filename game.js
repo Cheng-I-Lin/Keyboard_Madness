@@ -251,10 +251,12 @@ function drawGame(){
 function nextInstruct(){
     document.getElementById("intro").style.bottom="100vh";
     document.getElementById("gadgetPage").style.bottom="100vh";
+    introMusicStop();
 }
 function nextGadget(){
     document.getElementById("intro").style.bottom="100vh";
     document.getElementById("instructionPage").style.bottom="100vh";
+    introMusicStop();
 }
 function back(){
     document.getElementById("intro").style.bottom="0vh";
@@ -1158,92 +1160,94 @@ function addLevel(){
             break;
     }
 }
-
 //Draws all inventory items(change how current item works, should be when selected)
 function drawItem(){
     let item=document.getElementsByClassName("itemName");
-    let itemImg=document.getElementsByClassName("itemImg");
     for(let i=0;i<inventory.length;i++){
         switch(inventory[i]){
             case 0:
                 item[i].innerHTML="Lower Elevation";
-                itemImg[i].src="";
+                document.getElementById("icon"+i).className="fa fa-cloud-download";
                 break;
             case 1:
                 item[i].innerHTML="Magical Eraser";
-                itemImg[i].src="";
+                document.getElementById("icon"+i).className="fa fa-magic";
                 break;
             case 2:
                 item[i].innerHTML="Time Quiescence";
-                itemImg[i].src="";
+                document.getElementById("icon"+i).className="fa fa-hourglass-half";
                 break;
             case 3:
                 item[i].innerHTML="Meteor Reduction";
-                itemImg[i].src="";
+                document.getElementById("icon"+i).className="fa fa-ban";
                 break;
             case 4:
                 item[i].innerHTML="Immunity";
-                itemImg[i].src="";
+                //maybe fa fa-medkit
+                document.getElementById("icon"+i).className="fa fa-shield";
                 break;
             case 5:
                 item[i].innerHTML="Lucky Charm";
-                itemImg[i].src="";
+                document.getElementById("icon"+i).className="fa fa-star";
                 break;
             case 6:
                 item[i].innerHTML="Hot Streak";
-                itemImg[i].src="";
+                document.getElementById("icon"+i).className="fa fa-fire";
                 break;
             case 7:
                 item[i].innerHTML="Juggernaut";
-                itemImg[i].src="";
+                document.getElementById("icon"+i).className="fa fa-rocket";
                 break;
             case 8:
                 item[i].innerHTML="Omnipotent";
-                itemImg[i].src="";
+                document.getElementById("icon"+i).className="fa fa-universal-access";
                 break;
             case 9:
                 item[i].innerHTML="All-In Gambit";
-                itemImg[i].src="";
+                //maybe fa fa-money
+                document.getElementById("icon"+i).className="fa fa-bitcoin";
                 break;
             case 10:
                 item[i].innerHTML="Equal Trade";
-                itemImg[i].src="";
+                //or can do fa fa-balance-scale
+                document.getElementById("icon"+i).className="fa fa-handshake-o";
                 break;
             case 11:
                 item[i].innerHTML="Shuffle";
-                itemImg[i].src="";
+                document.getElementById("icon"+i).className="fa fa-refresh";
                 break;
             case 12:
                 item[i].innerHTML="Time Rewind";
-                itemImg[i].src="";
+                document.getElementById("icon"+i).className="fa fa-fast-backward";
                 break;
             case 13:
                 item[i].innerHTML="Primitive Meteors";
-                itemImg[i].src="";
+                document.getElementById("icon"+i).className="fa fa-history";
                 break;
             case 14:
                 item[i].innerHTML="Digits Only";
-                itemImg[i].src="";
+                document.getElementById("icon"+i).className="fa fa-sort-numeric-asc";
                 break;
             case 15:
                 item[i].innerHTML="Letters Only";
-                itemImg[i].src="";
+                document.getElementById("icon"+i).className="fa fa-sort-alpha-asc";
                 break;
             case 16:
                 item[i].innerHTML="Symbols Only";
-                itemImg[i].src="";
+                document.getElementById("icon"+i).className="fa fa-hashtag";
                 break;
             case 17:
                 item[i].innerHTML="Arrows Only";
-                itemImg[i].src="";
+                //or can do fa fa-toggle-up
+                document.getElementById("icon"+i).className="fa fa-sort";
                 break;
             case 18:
                 item[i].innerHTML="Restricted Area";
-                itemImg[i].src="";
+                document.getElementById("icon"+i).className="fa fa-warning";
                 break;
             case 19:
                 item[i].innerHTML="Infinity Barrier";
-                itemImg[i].src="";
+                document.getElementById("icon"+i).className="fa fa-tachometer";
                 break;
             default:
                 break;
@@ -1253,11 +1257,11 @@ function drawItem(){
     if(inventory.length<10){
         for(let i=10;i>inventory.length;i--){
             item[i-1].innerHTML="No Item";
-            itemImg[i-1].src="";
+            document.getElementById("icon"+(i-1)).className="fa fa-times-circle";
         }
     }
 }
-//inventory=[1,2,3,4,18,14,15,16,7,11];
+//inventory=[1,2,3,9,18,14,15,16,7];
 var num=0;
 var levelTime=0;
 //Create meteor objects
@@ -1426,87 +1430,87 @@ setInterval(function(){
         switch(inventory[idIndex]){
             case 0:
                 currentItem.innerHTML="Lower Elevation";
-                currentItemImg.src="";
+                currentItemImg.className="fa fa-cloud-download";
                 break;
             case 1:
                 currentItem.innerHTML="Magical Eraser";
-                currentItemImg.src="";
+                currentItemImg.className="fa fa-magic";
                 break;
             case 2:
                 currentItem.innerHTML="Time Quiescence";
-                currentItemImg.src="";
+                currentItemImg.className="fa fa-hourglass-half";
                 break;
             case 3:
                 currentItem.innerHTML="Meteor Reduction";
-                currentItemImg.src="";
+                currentItemImg.className="fa fa-ban";
                 break;
             case 4:
                 currentItem.innerHTML="Immunity";
-                currentItemImg.src="";
+                currentItemImg.className="fa fa-shield";
                 break;
             case 5:
                 currentItem.innerHTML="Lucky Charm";
-                currentItemImg.src="";
+                currentItemImg.className="fa fa-star";
                 break;
             case 6:
                 currentItem.innerHTML="Hot Streak";
-                currentItemImg.src="";
+                currentItemImg.className="fa fa-fire";
                 break;
             case 7:
                 currentItem.innerHTML="Juggernaut";
-                currentItemImg.src="";
+                currentItemImg.className="fa fa-rocket";
                 break;
             case 8:
                 currentItem.innerHTML="Omnipotent";
-                currentItemImg.src="";
+                currentItemImg.className="fa fa-universal-access";
                 break;
             case 9:
                 currentItem.innerHTML="All-In Gambit";
-                currentItemImg.src="";
+                currentItemImg.className="fa fa-bitcoin";
                 break;
             case 10:
                 currentItem.innerHTML="Equal Trade";
-                currentItemImg.src="";
+                currentItemImg.className="fa fa-handshake-o";
                 break;
             case 11:
                 currentItem.innerHTML="Shuffle";
-                currentItemImg.src="";
+                currentItemImg.className="fa fa-refresh";
                 break;
             case 12:
                 currentItem.innerHTML="Time Rewind";
-                currentItemImg.src="";
+                currentItemImg.className="fa fa-fast-backward";
                 break;
             case 13:
                 currentItem.innerHTML="Primitive Meteors";
-                currentItemImg.src="";
+                currentItemImg.className="fa fa-history";
                 break;
             case 14:
                 currentItem.innerHTML="Digits Only";
-                currentItemImg.src="";
+                currentItemImg.className="fa fa-sort-numeric-asc";
                 break;
             case 15:
                 currentItem.innerHTML="Letters Only";
-                currentItemImg.src="";
+                currentItemImg.className="fa fa-sort-alpha-asc";
                 break;
             case 16:
                 currentItem.innerHTML="Symbols Only";
-                currentItemImg.src="";
+                currentItemImg.className="fa fa-hashtag";
                 break;
             case 17:
                 currentItem.innerHTML="Arrows Only";
-                currentItemImg.src="";
+                currentItemImg.className="fa fa-sort";
                 break;
             case 18:
                 currentItem.innerHTML="Restricted Area";
-                currentItemImg.src="";
+                currentItemImg.className="fa fa-warning";
                 break;
             case 19:
                 currentItem.innerHTML="Infinity Barrier";
-                currentItemImg.src="";
+                currentItemImg.className="fa fa-tachometer";
                 break;
             default:
                 currentItem.innerHTML="No Item Selected";
-                currentItemImg.src="";
+                currentItemImg.className="fa fa-times-circle";
                 break;
         }
     }

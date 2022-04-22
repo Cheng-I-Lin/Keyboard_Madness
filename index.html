@@ -6,6 +6,8 @@
         <title>Keyboard Madness</title>
         <link rel="stylesheet" href="style.css" />
         <link rel="icon" type="image/png" href="icon.png"/>
+        <!--icons obtained from w3school: https://www.w3schools.com/icons/fontawesome_icons_brand.asp-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
     </head>
     <body>
         <!--Colors from https://www.colorhunt.co/-->
@@ -16,8 +18,8 @@
         <div id="points"></div>
         <!--Shows what item is being used right now-->
         <div id="currentItemPage">
-            <strong>Current Item</strong><br>
-            <img id="currentItemImg"><br>
+            <br><strong>Current Item</strong><br>
+            <i id="currentItemImg"></i><br>
             <strong><span id="currentItem"></span></strong>
         </div>
         <div id="settingPage"><br>
@@ -32,44 +34,44 @@
         <div id="showInventory"><strong>Inventory</strong></div>
         <div id="inventory">
             <div class="box" id="item0" onclick="callInventory(this.id);">
-                <strong><span class="itemName"></span></strong><br>
-                <img class="itemImg">
+                <strong><span class="itemName"></span></strong><br><br>
+                <i id="icon0"></i>
             </div>
             <div class="box" id="item1" onclick="callInventory(this.id);">
-                <strong><span class="itemName"></span></strong><br>
-                <img class="itemImg">
+                <strong><span class="itemName"></span></strong><br><br>
+                <i id="icon1"></i>
             </div>
             <div class="box" id="item2" onclick="callInventory(this.id);">
-                <strong><span class="itemName"></span></strong><br>
-                <img class="itemImg">
+                <strong><span class="itemName"></span></strong><br><br>
+                <i id="icon2"></i>
             </div>
             <div class="box" id="item3" onclick="callInventory(this.id);">
-                <strong><span class="itemName"></span></strong><br>
-                <img class="itemImg">
+                <strong><span class="itemName"></span></strong><br><br>
+                <i id="icon3"></i>
             </div>
             <div class="box" id="item4" onclick="callInventory(this.id);">
-                <strong><span class="itemName"></span></strong><br>
-                <img class="itemImg">
+                <strong><span class="itemName"></span></strong><br><br>
+                <i id="icon4"></i>
             </div>
             <div class="box" id="item5" onclick="callInventory(this.id);">
-                <strong><span class="itemName"></span></strong><br>
-                <img class="itemImg">
+                <strong><span class="itemName"></span></strong><br><br>
+                <i id="icon5"></i>
             </div>
             <div class="box" id="item6" onclick="callInventory(this.id);">
-                <strong><span class="itemName"></span></strong><br>
-                <img class="itemImg">
+                <strong><span class="itemName"></span></strong><br><br>
+                <i id="icon6"></i>
             </div>
             <div class="box" id="item7" onclick="callInventory(this.id);">
-                <strong><span class="itemName"></span></strong><br>
-                <img class="itemImg">
+                <strong><span class="itemName"></span></strong><br><br>
+                <i id="icon7"></i>
             </div>
             <div class="box" id="item8" onclick="callInventory(this.id);">
-                <strong><span class="itemName"></span></strong><br>
-                <img class="itemImg">
+                <strong><span class="itemName"></span></strong><br><br>
+                <i id="icon8"></i>
             </div>
             <div class="box" id="item9" onclick="callInventory(this.id);">
-                <strong><span class="itemName"></span></strong><br>
-                <img class="itemImg">
+                <strong><span class="itemName"></span></strong><br><br>
+                <i id="icon9"></i>
             </div>
         </div>
         <div id="instructionPage">
