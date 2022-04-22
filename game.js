@@ -1257,7 +1257,7 @@ function drawItem(){
         }
     }
 }
-inventory=[1,2,3,4,18,14,15,16,7,11];
+//inventory=[1,2,3,4,18,14,15,16,7,11];
 var num=0;
 var levelTime=0;
 //Create meteor objects
