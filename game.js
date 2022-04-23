@@ -38,7 +38,7 @@ var blockHeight=50;
 var blockSymbol="";
 var blockLevel=1;
 var blockLives=1;
-var meteorTime=1000;
+var meteorTime=5000;
 var score=0;
 
 //Intro transitions 2000
