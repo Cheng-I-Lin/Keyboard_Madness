@@ -546,6 +546,9 @@ document.addEventListener("keyup",function(key){
                     break;
                 case 8:
                     omnipitent=true;
+                    setTimeout(function(){
+                        omnipitent=false;
+                    },5000);
                     itemUsed.innerHTML="Omnipotent";
                     break;
                 case 9:
@@ -1209,8 +1212,7 @@ function drawItem(){
                 break;
             case 10:
                 item[i].innerHTML="Equal Trade";
-                //or can do fa fa-balance-scale
-                document.getElementById("icon"+i).className="fa fa-handshake-o";
+                document.getElementById("icon"+i).className="fa fa-balance-scale";
                 break;
             case 11:
                 item[i].innerHTML="Shuffle";
@@ -1261,7 +1263,7 @@ function drawItem(){
         }
     }
 }
-//inventory=[1,2,3,9,18,14,15,16,7];
+inventory=[1,2,3,9,18,10,15,16,7];
 var num=0;
 var levelTime=0;
 //Create meteor objects
@@ -1470,7 +1472,7 @@ setInterval(function(){
                 break;
             case 10:
                 currentItem.innerHTML="Equal Trade";
-                currentItemImg.className="fa fa-handshake-o";
+                currentItemImg.className="fa fa-balance-scale";
                 break;
             case 11:
                 currentItem.innerHTML="Shuffle";
