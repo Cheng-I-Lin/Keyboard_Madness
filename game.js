@@ -1,6 +1,6 @@
 //Use this.attribute for the attributes(use currentlevel for final game but block level for testing)
 class Meteor{
-    constructor(x,y,level=blockLevel,symbol=blockSymbol,speed=blockSpeed,lives=blockLives,color="black",width=blockWidth,height=blockHeight,dead=false) {
+    constructor(x,y,level=currentLevel,symbol=blockSymbol,speed=blockSpeed,lives=blockLives,color="black",width=blockWidth,height=blockHeight,dead=false) {
         this.x=x;
         this.y=y;
         this.color=color;
@@ -1283,7 +1283,7 @@ function drawItem(){
         }
     }
 }
-inventory=[1,2,3,9,18,10,15,16,7];
+//inventory=[1,2,3,9,18,10,15,16,7];
 var num=0;
 var levelTime=0;
 //Create meteor objects
