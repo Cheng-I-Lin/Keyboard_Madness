@@ -95,6 +95,7 @@ var restrict={
     on:false,
     x:0
 };
+var volume=true;
 
 function drawBackground(){
     let canvas=document.getElementById("background");
@@ -362,17 +363,23 @@ function pauseGame(){
 //Adding sounds to the game from https://mixkit.co/free-sound-effects/game/
 function transitionSound(){
     let audio=new Audio("notificationSound.mp3");
-    audio.play();
+    if(volume){
+        audio.play();
+    }
 }
 function playGameOver(){
     let audio=new Audio("gameoverSound.mp3");
     audio.loop=false;
-    audio.play();
+    if(volume){
+        audio.play();
+    }
 }
 var audioIntro=new Audio("introMusic.mp3");
 function introMusic(){
     audioIntro.loop=true;
-    audioIntro.play();
+    if(volume){
+        audioIntro.play();
+    }
 }
 //Stops intro music when game starts
 function introMusicStop(){
@@ -380,7 +387,20 @@ function introMusicStop(){
 }
 function removeMeteor(){
     let audio=new Audio("removeMeteor.mp3");
-    audio.play();
+    if(volume){
+        audio.play();
+    }
+}
+function volumeChange(){
+    if(volume){
+        document.getElementById("volume").className="fa fa-volume-off";
+        volume=false;
+        introMusicStop();
+    } else{
+        document.getElementById("volume").className="fa fa-volume-up";
+        volume=true;
+        introMusic();
+    }
 }
 
 const itemUsed=document.getElementById("itemUsed");

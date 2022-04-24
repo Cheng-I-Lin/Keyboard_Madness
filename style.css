@@ -514,3 +514,32 @@ body{
     font-size: 4.5em;
     top: 532%;
 }
+#footer{
+    position: absolute;
+    width: 20%;
+    height: 7.5%;
+    right: 1%;
+    bottom: 0%;
+    text-align: right;
+}
+.footerIcon{
+    font-size: 2.25em;
+    /*Specifies the spacing between each letter*/
+    letter-spacing: 2px;
+    transition: color 0.5s;
+    color: white;
+}
+.footerIcon:link {
+    color: white;
+    background-color: transparent;
+    text-decoration: none;
+}
+.footerIcon:visited {
+    color: white;
+    background-color: transparent;
+    text-decoration: none;
+}
+.footerIcon:hover {
+    color: rgb(243, 149, 13);
+    background-color: transparent;
+}
