@@ -46,7 +46,7 @@ setTimeout(function(){
     document.getElementById("img").style.opacity=0;
     document.getElementById("clickAnywhere").style.display="block";
     document.getElementById("transition").style.opacity=1;
-},2);
+},2000);
 //Hides this page so hover button will work
 document.getElementById("introImg").addEventListener("click", function(){
     document.getElementById("introImg").style.opacity=0;
